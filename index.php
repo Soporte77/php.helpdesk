@@ -30,13 +30,7 @@
     <div class="page-center">
         <div class="page-center-in">
             <div class="container-fluid">
-                <style>
-                    body {
-                        
-                        background-size: cover;
-                        background-image: url("public/imagen1.jpg")
-                    }
-                    </style>
+               
 
                 <form class="sign-box" action="" method="post" id="login_form">
 
