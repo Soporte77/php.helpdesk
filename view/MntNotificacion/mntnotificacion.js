@@ -2,7 +2,7 @@
 $(document).ready(function(){
     /* TODO: Obtener ID del usuario que inicio session */
     var usu_id = $('#user_idx').val();
-
+    var rol_id =  $('#rol_idx').val();
     /* TODO: Listado de registros */
     tabla=$('#notificacion_data').dataTable({
         "aProcessing": true,
@@ -21,7 +21,7 @@ $(document).ready(function(){
             url: '../../controller/notificacion.php?op=listar',
             type : "post",
             dataType : "json",
-            data: {usu_id : usu_id},
+            data: {usu_id : usu_id, rol_id:rol_id},
             error: function(e){
                 console.log(e.responseText);
             }
@@ -60,5 +60,5 @@ $(document).ready(function(){
 
 /* TODO: Funcion para abrir detalle de ticket en una nueva ventana */
 function ver(tick_id){
-    window.open('http://187.237.254.57/HelpDesk/view/DetalleTicket/?ID='+ tick_id +'');
+    window.open('http://localhost/helpDesk/view/DetalleTicket/?ID='+ tick_id +'');
 }

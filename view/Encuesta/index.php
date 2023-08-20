@@ -130,7 +130,7 @@
 <script src="../../public/js/lib/bootstrap-sweetalert/sweetalert.min.js"></script>
 <script type="text/javascript" src="encuesta.js"></script>
 <script>
-    $('#tick_estre').rating({ 
+    $('#Etick_estre').rating({ 
         showCaption: false
     });
 </script>

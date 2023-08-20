@@ -9,7 +9,14 @@
 
         /* TODO: Mostrar en formato JSON segun usu_id */
         case "mostrar";
-            $datos=$notificacion->get_notificacion_x_usu($_POST["usu_id"]);  
+            $rol_id =  $_POST["rol_id"];
+            $datos  = "";
+            //Administrador: Traigo todas las notificaciones
+            if($rol_id == 3){
+                $datos=$notificacion->get_notificacion_xAll();
+            }else{
+                $datos=$notificacion->get_notificacion_x_usu($_POST["usu_id"]);  
+            }
             if(is_array($datos)==true and count($datos)>0){
                 foreach($datos as $row)
                 {
@@ -29,7 +36,15 @@
 
         /* TODO: Listado de notificacion segun formato json para el datatable */    
         case "listar":
-            $datos=$notificacion->get_notificacion_x_usu2($_POST["usu_id"]);
+            $rol_id =  $_POST["rol_id"];
+            $datos  = "";
+            //Administrador: Traigo todas las notificaciones
+            if($rol_id == 3){
+                $datos=$notificacion->get_notificacion_xAll2();
+            }else{
+                $datos=$notificacion->get_notificacion_x_usu2($_POST["usu_id"]);
+    
+            }
             $data= Array();
             foreach($datos as $row){
                 $sub_array = array();

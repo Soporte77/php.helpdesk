@@ -11,6 +11,15 @@
             $sql->execute();
             return $resultado=$sql->fetchAll();
         }
+        /* TODO:Todos los registros para el administrador*/
+        public function get_notificacion_xAll(){
+            $conectar= parent::conexion();
+            parent::set_names();
+            $sql="SELECT * FROM tm_notificacion WHERE est=2 Limit 1;";
+            $sql=$conectar->prepare($sql);
+            $sql->execute();
+            return $resultado=$sql->fetchAll();
+        }
 
         /* TODO: Obtener registro segun el usuario */
         public function get_notificacion_x_usu2($usu_id){
@@ -19,6 +28,17 @@
             $sql="SELECT * FROM tm_notificacion WHERE usu_id= ?";
             $sql=$conectar->prepare($sql);
             $sql->bindValue(1, $usu_id);
+            $sql->execute();
+            return $resultado=$sql->fetchAll();
+        }
+        /* TODO: Traer todas las notificaciones para el administrador */
+        public function get_notificacion_xAll2(){
+            $conectar= parent::conexion();
+            parent::set_names();
+            $sql="SELECT * FROM tm_notificacion
+            WHERE not_mensaje LIKE 'Nuevo%'
+            ORDER BY not_id DESC";
+            $sql=$conectar->prepare($sql);
             $sql->execute();
             return $resultado=$sql->fetchAll();
         }

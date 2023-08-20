@@ -18,7 +18,17 @@
             $sql1="select last_insert_id() as 'tick_id';";
             $sql1=$conectar->prepare($sql1);
             $sql1->execute();
-            return $resultado=$sql1->fetchAll(pdo::FETCH_ASSOC);
+
+            //INSERTAR NOTIFICACION PARA EL ADMINISTRADOR NUEVO TICKET
+            /* TODO: Guardar Notificacion en la tabla */
+            $preResult = $sql1->fetchAll(pdo::FETCH_ASSOC);
+            $getId     = $preResult[0]["tick_id"];
+            $sql2="INSERT INTO tm_notificacion (not_id,usu_id,not_mensaje,tick_id,est) VALUES (null,?,'Nuevo Ticket creado #',?,2)";
+            $sql2=$conectar->prepare($sql2);
+            $sql2->bindValue(1, $usu_id);
+            $sql2->bindValue(2, $getId);
+            $sql2->execute();
+            return $preResult;
         }
 
         /* TODO: Listar ticket segun id de usuario */
@@ -124,7 +134,7 @@
                 INNER join tm_prioridad on tm_ticket.prio_id = tm_prioridad.prio_id
                 WHERE
                 tm_ticket.est = 1
-                ORDER BY tm_ticket.tick_id DESC";
+                ORDER BY tm_ticket.tick_estado ASC";
             $sql=$conectar->prepare($sql);
             $sql->execute();
             return $resultado=$sql->fetchAll();

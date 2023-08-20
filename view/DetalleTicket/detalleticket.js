@@ -4,7 +4,9 @@ function init(){
 
 $(document).ready(function(){
     var tick_id = getUrlParameter('ID');
-
+    $('#Etick_estre').rating({ 
+        showCaption: false
+    });
     listardetalle(tick_id);
 
     /* TODO: Inicializamos summernotejs */
@@ -99,7 +101,6 @@ $(document).ready(function(){
             }
         }
     }).DataTable();
-
 });
 
 var getUrlParameter = function getUrlParameter(sParam) {
@@ -201,31 +202,77 @@ $(document).on("click","#btncerrarticket", function(){
 });
 $(document).on("click","#btncerrarticketUsuario", function(){
     /* TODO: Preguntamos antes de cerrar el ticket */
-    
-    swal({
-        title: "HelpDesk",
-        text: "Esta seguro de Cerrar el Ticket?",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonClass: "btn-warning",
-        confirmButtonText: "Si",
-        cancelButtonText: "No",
-        closeOnConfirm: false
-    },
-    function(isConfirm) {
-        if (isConfirm) {
-            var tick_id = getUrlParameter('ID');
-            var url = window.location.href;
-            localStorage.setItem('rutaAnterior',url)
-            var rutaHastaView = url.split('/view')[0] + '/view';
-            var rutaEncuesta  = rutaHastaView + '/'+'encuesta/?ID='+tick_id
-            window.open(rutaEncuesta,'_self')
+    var tick_id = getUrlParameter('ID');
+    listardetalleEncuesta(tick_id);
+    $('#mdltitulo').html('Llene la encuesta de satisfacción');
+    $("#modalEncuesta").modal('show');
+    // swal({
+    //     title: "HelpDesk",
+    //     text: "Esta seguro de Cerrar el Ticket?",
+    //     type: "warning",
+    //     showCancelButton: true,
+    //     confirmButtonClass: "btn-warning",
+    //     confirmButtonText: "Si",
+    //     cancelButtonText: "No",
+    //     closeOnConfirm: false
+    // },
+    // function(isConfirm) {
+    //     if (isConfirm) {
+    //         var tick_id = getUrlParameter('ID');
+    //         var url = window.location.href;
+    //         localStorage.setItem('rutaAnterior',url)
+    //         var rutaHastaView = url.split('/view')[0] + '/view';
+    //         var rutaEncuesta  = rutaHastaView + '/'+'encuesta/?ID='+tick_id
+    //         window.open(rutaEncuesta,'_self')
+    //     }
+    // });
+});
+function listardetalleEncuesta(tick_id){
+    /* TODO: Mostra detalle de ticket */
+    $.post("../../controller/ticket.php?op=mostrar", { tick_id : tick_id }, function (data) {
+        data = JSON.parse(data);
+        $('#Elblestado').val(data.tick_estado_texto);
+        $('#Eusu_id').val(data.usu_id)
+        $('#Elblnomusuario').val(data.usu_nom +' '+data.usu_ape);
+        $('#Elblfechcrea').val(data.fech_crea);
+        $('#Elblnomidticket').val(data.tick_id);
+        $('#Ecat_nom').val(data.cat_nom);
+        $('#Ecats_nom').val(data.cats_nom);
+        $('#Etick_titulo').val(data.tick_titulo);
+        $('#Eprio_nom').val(data.prio_nom);
+        $('#Elblfechcierre').val(data.fech_cierre);
+        if (data.tick_estre==null){
+        }else{
+            $('#panel1').hide();
         }
     });
+}
+/* TODO:Guardar Informacion de estrella del ticket */
+$(document).on("click","#btnguardar", function(){
+    var tick_id = getUrlParameter('ID');
+    var tick_estre = $('#Etick_estre').val(); 
+    var tick_coment = $('#Etick_coment').val();
+    var usu_id      = $('#Eusu_id').val()
+    $.post("../../controller/ticket.php?op=encuesta", { tick_id : tick_id,tick_estre:tick_estre,tick_coment:tick_coment}, function (data) {
+        console.log(data);
+        $('#panel1').hide();
+        swal("Correcto!", "Gracias por su Tiempo", "success");
+    }); 
+    /* TODO: Actualizamos el ticket  */
+    $.post("../../controller/ticket.php?op=update", { tick_id : tick_id,usu_id : usu_id }, function (data) {
+
+    });
+     /* TODO: Ocultar Modal */
+     $("#modalEncuesta").modal('hide');
+     /* TODO:Recargar Datatable JS */
+     listardetalle(tick_id)
 });
-
-
+$(document).on("click","#btnRegresar", function(){
+    let url = localStorage.rutaAnterior
+    window.open(url,'_self')
+});
 function listardetalle(tick_id){
+    console.log("entro")
     /* TODO: Mostramos informacion de detalle de ticket */
     $.post("../../controller/ticket.php?op=listardetalle", { tick_id : tick_id }, function (data) {
         $('#lbldetalle').html(data);

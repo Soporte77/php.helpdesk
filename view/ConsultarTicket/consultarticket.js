@@ -27,6 +27,7 @@ $(document).ready(function(){
 
     /* TODO: rol si es 1 entonces es usuario */
     if (rol_id==1){
+        console.log("hola munoddoo")
         $('#viewuser').hide();
 
         tabla=$('#ticket_data').dataTable({
@@ -218,6 +219,9 @@ function listardatatable(tick_titulo,cat_id,prio_id){
             type : "post",
             dataType : "json",
             data:{ tick_titulo:tick_titulo,cat_id:cat_id,prio_id:prio_id,rol_id:rol_id,usu_id:usu_id},
+            // success:function(e){
+            //     console.log("rock",e)
+            // },
             error: function(e){
                 console.log(e.responseText);
             }
@@ -252,6 +256,7 @@ function listardatatable(tick_titulo,cat_id,prio_id){
             }
         }     
     }).DataTable().ajax.reload();
+    tabla.order([4, 'asc']).draw();
 }
 
 /* TODO: Limpiamos restructurando el html del datatable js */

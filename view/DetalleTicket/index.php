@@ -6,6 +6,7 @@ if (isset($_SESSION["usu_id"])) {
   <html>
   <?php require_once("../MainHead/head.php"); ?>
   <title>Peticiones</>::Detalle Ticket</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.2/css/star-rating.min.css" />
   </head>
 
   <body class="with-side-menu">
@@ -152,15 +153,18 @@ if (isset($_SESSION["usu_id"])) {
       </div>
     </div>
     <!-- Contenido -->
-
+	  <?php require_once("ModalEncuesta.php");?>
     <?php require_once("../MainJs/js.php"); ?>
 
     <script type="text/javascript" src="detalleticket.js"></script>
-
-    <script type="text/javascript" src="../notificacion.js"></script>
-
+    <script type="text/javascript" src="../notificacion.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.2/js/star-rating.min.js"></script>             
+    <script>
+      $('#tick_estre').rating({ 
+          showCaption: false
+      });
+  </script>            
   </body>
-
   </html>
 <?php
 } else {
