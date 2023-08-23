@@ -251,10 +251,13 @@ function listardetalleEncuesta(tick_id){
 $(document).on("click","#btnguardar", function(){
     var tick_id = getUrlParameter('ID');
     var tick_estre = $('#Etick_estre').val(); 
+    if(tick_estre == null || tick_estre == undefined || tick_estre == ""){
+        swal("Mensaje!", "Califique con una estrella por favor", "warning");
+        return
+    }
     var tick_coment = $('#Etick_coment').val();
     var usu_id      = $('#Eusu_id').val()
     $.post("../../controller/ticket.php?op=encuesta", { tick_id : tick_id,tick_estre:tick_estre,tick_coment:tick_coment}, function (data) {
-        console.log(data);
         $('#panel1').hide();
         swal("Correcto!", "Gracias por su Tiempo", "success");
     }); 
@@ -272,7 +275,6 @@ $(document).on("click","#btnRegresar", function(){
     window.open(url,'_self')
 });
 function listardetalle(tick_id){
-    console.log("entro")
     /* TODO: Mostramos informacion de detalle de ticket */
     $.post("../../controller/ticket.php?op=listardetalle", { tick_id : tick_id }, function (data) {
         $('#lbldetalle').html(data);
