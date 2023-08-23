@@ -32,7 +32,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="nombreCompleto">Fecha de Cierre</label>
+                                    <label for="fechaActual">Fecha de Cierre</label>
                                     <input type="text" class="form-control" id="Elblfechcierre" name="Elblfechcierre" readonly>
                                 </div>
                             </div>
@@ -112,7 +112,7 @@
 
                     <section>
                         <div style="display:flex;justify-content: center;">
-                            <button type="button" class="btn btn-info" id="btnguardar">Guardar Encuesta</button>
+                            <button type="button" class="btn btn-info" id="btnguardar">Cerrar Ticket</button>
                         </div>
                         <br><br>
                     </section>

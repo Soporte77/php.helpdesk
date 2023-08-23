@@ -39,6 +39,13 @@
                             <span class="lbl">Inicio</span>
                         </a>
                     </li>
+                    <li class="blue-dirty">
+                        <a href="..\NuevoTicket\">
+                            <span class="glyphicon glyphicon-th"></span>
+                            <span class="lbl">Nuevo Ticket</span>
+                        </a>
+                    </li>
+
                     <!-- <li class="blue-dirty">
                         <a href="..\MntUsuario\">
                             <span class="glyphicon glyphicon-th"></span>

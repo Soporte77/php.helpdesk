@@ -363,9 +363,16 @@
                     }
 
                     $output["tick_estado_texto"] = $row["tick_estado"];
-
+                    $fechaCierre = null;
+                    if($row["fech_cierre"] == null){
+                        date_default_timezone_set("America/Lima");
+                        //extraemos la fecha usando la funcion date del PHP
+                        $fechaCierre = date("Y-m-d H:i:s");
+                    }else{
+                        $fechaCierre = $row["fech_cierre"];
+                    }
                     $output["fech_crea"] = date("d/m/Y H:i:s", strtotime($row["fech_crea"]));
-                    $output["fech_cierre"] = date("d/m/Y H:i:s", strtotime($row["fech_cierre"]));
+                    $output["fech_cierre"] = date("d/m/Y H:i:s", strtotime($fechaCierre));
                     $output["usu_nom"] = $row["usu_nom"];
                     $output["usu_ape"] = $row["usu_ape"];
                     $output["cat_nom"] = $row["cat_nom"];
