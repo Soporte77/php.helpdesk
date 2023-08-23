@@ -23,18 +23,34 @@ function mostrar_notificacion(){
                 data = JSON.parse(data);
                 //solo para los administradores pueden ver el nuevo ticket creado en notificacion
                 if (data.not_mensaje.includes("Nuevo")) {
+                    console.log("user")
                     if(rol_id != 3){
                         return
+                    }else{
+                        $.notify({
+                            icon: 'glyphicon glyphicon-star',
+                            message: data.not_mensaje,
+                            url: "http:/localhost/HelpDesk/view/DetalleTicket/?ID="+data.tick_id
+                        });
+                        $.post("../../controller/notificacion.php?op=actualizar", {not_id : data.not_id}, function (data) {
+        
+                        });
                     }
-                } 
-                $.notify({
-                    icon: 'glyphicon glyphicon-star',
-                    message: data.not_mensaje,
-                    url: "http:/localhost/HelpDesk/view/DetalleTicket/?ID="+data.tick_id
-                });
-                $.post("../../controller/notificacion.php?op=actualizar", {not_id : data.not_id}, function (data) {
-
-                });
+                } else{
+                    console.log("normal")
+                    if(rol_id == 3){
+                        return
+                    }
+                    console.log("normal1")
+                    $.notify({
+                        icon: 'glyphicon glyphicon-star',
+                        message: data.not_mensaje,
+                        url: "http:/localhost/HelpDesk/view/DetalleTicket/?ID="+data.tick_id
+                    });
+                    $.post("../../controller/notificacion.php?op=actualizar", {not_id : data.not_id}, function (data) {
+    
+                    });
+                }
             }
         }
     });

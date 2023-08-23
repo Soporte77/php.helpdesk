@@ -27,9 +27,7 @@ $(document).ready(function(){
 
     /* TODO: rol si es 1 entonces es usuario */
     if (rol_id==1){
-        console.log("hola munoddoo")
         $('#viewuser').hide();
-
         tabla=$('#ticket_data').dataTable({
             "aProcessing": true,
             "aServerSide": true,
