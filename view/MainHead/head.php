@@ -8,6 +8,7 @@
 <link href="img/favicon.57x57.png" rel="apple-touch-icon" type="image/png">
 <link href="img/favicon.png" rel="icon" type="image/png">
 <link href="img/favicon.ico" rel="shortcut icon">
+<link rel="icon" id="favicon" type="image/jpg" href="https://cdn-icons-png.flaticon.com/512/94/94717.png">
 
 <link rel="stylesheet" href="../../public/css/separate/vendor/fancybox.min.css">
 <link rel="stylesheet" href="../../public/css/separate/pages/activity.min.css">
