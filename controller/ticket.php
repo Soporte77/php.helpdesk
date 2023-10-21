@@ -8,9 +8,11 @@
     require_once("../models/Usuario.php");
     $usuario = new Usuario();
 
+    require_once("../models/Configuracion.php");
+    $configuracion = new Configuracion();
+
     require_once("../models/Documento.php");
     $documento = new Documento();
-
     /*TODO: opciones del controlador Ticket*/
     switch($_GET["op"]){
 
@@ -459,7 +461,8 @@
 
         /* TODO: Formato Json para grafico de soporte */
         case "grafico";
-            $datos=$ticket->get_ticket_grafico();  
+            $datos=$ticket->get_ticket_grafico(); 
+            $configuracion->BackupDb();
             echo json_encode($datos);
             break;
 
