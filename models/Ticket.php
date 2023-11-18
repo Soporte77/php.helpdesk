@@ -262,6 +262,23 @@
         }
 
         /* TODO: actualizar ticket */
+        public function updateTicketInformacion($tick_id,$cat_id,$cats_id){
+            $conectar= parent::conexion();
+            parent::set_names();
+            $sql="update tm_ticket 
+                set	
+                    cat_id =  ?,
+                    cats_id = ?
+                where
+                    tick_id = ?";
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, $cat_id);
+            $sql->bindValue(2, $cats_id);
+            $sql->bindValue(3, $tick_id);
+            $sql->execute();
+            return $resultado=$sql->fetchAll();
+        }
+        /* TODO: actualizar ticket */
         public function update_ticket($tick_id){
             $conectar= parent::conexion();
             parent::set_names();

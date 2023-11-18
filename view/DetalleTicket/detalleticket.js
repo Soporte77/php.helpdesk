@@ -7,8 +7,10 @@ $(document).ready(function(){
     $('#Etick_estre').rating({ 
         showCaption: false
     });
+    let rol_id =  $('#rol_idx').val();
+    //administrador puede editar la categoria y subcategoria
+    if(rol_id == 3) {  setCombos(tick_id) }
     listardetalle(tick_id);
-
     /* TODO: Inicializamos summernotejs */
     $('#tickd_descrip').summernote({
         height: 400,
@@ -102,6 +104,7 @@ $(document).ready(function(){
         }
     }).DataTable();
 });
+
 
 var getUrlParameter = function getUrlParameter(sParam) {
     var sPageURL = decodeURIComponent(window.location.search.substring(1)),
@@ -207,26 +210,6 @@ $(document).on("click","#btncerrarticketUsuario", function(){
     listardetalleEncuesta(tick_id);
     $('#mdltitulo').html('Llene la encuesta de satisfacción');
     $("#modalEncuesta").modal('show');
-    // swal({
-    //     title: "HelpDesk",
-    //     text: "Esta seguro de Cerrar el Ticket?",
-    //     type: "warning",
-    //     showCancelButton: true,
-    //     confirmButtonClass: "btn-warning",
-    //     confirmButtonText: "Si",
-    //     cancelButtonText: "No",
-    //     closeOnConfirm: false
-    // },
-    // function(isConfirm) {
-    //     if (isConfirm) {
-    //         var tick_id = getUrlParameter('ID');
-    //         var url = window.location.href;
-    //         localStorage.setItem('rutaAnterior',url)
-    //         var rutaHastaView = url.split('/view')[0] + '/view';
-    //         var rutaEncuesta  = rutaHastaView + '/'+'encuesta/?ID='+tick_id
-    //         window.open(rutaEncuesta,'_self')
-    //     }
-    // });
 });
 function listardetalleEncuesta(tick_id){
     /* TODO: Mostra detalle de ticket */
@@ -273,7 +256,6 @@ $(document).on("click","#btnRegresar", function(){
     window.open(url,'_self')
 });
 function listardetalle(tick_id){
-    console.log("entro")
     /* TODO: Mostramos informacion de detalle de ticket */
     $.post("../../controller/ticket.php?op=listardetalle", { tick_id : tick_id }, function (data) {
         $('#lbldetalle').html(data);
@@ -282,6 +264,16 @@ function listardetalle(tick_id){
     /* TODO: Mostramos informacion del ticket en inputs */
     $.post("../../controller/ticket.php?op=mostrar", { tick_id : tick_id }, function (data) {
         data = JSON.parse(data);
+        let rol_id =  $('#rol_idx').val();
+        //llenar los combos para editar la categoria y subcategoria
+        if(rol_id == 3){
+            //categoria
+            const select    = document.querySelector('#categoriaId');
+            select.value    = data.cat_id 
+            //subcategoria
+            setSubcategoria(data.cat_id,data.cats_id)
+          
+        }
         $('#lblestado').html(data.tick_estado);
         $('#lblnomusuario').html(data.usu_nom +' '+data.usu_ape);
         $('#lblfechcrea').html(data.fech_crea);
@@ -301,6 +293,58 @@ function listardetalle(tick_id){
         }
     });
 }
-
+//CATEGORIAS Y SUBCATEGORIAS
+function setCombos(tick_id){
+    /* TODO: Llenar Combo categoria */
+    $.post("../../controller/categoria.php?op=combo",function(data, status){
+        $('#categoriaId').html(data);
+    });
+    $("#categoriaId").change(function(){
+        cat_id = $(this).val();
+        /* TODO: llenar Combo subcategoria segun cat_id */
+        $.post("../../controller/subcategoria.php?op=combo",{cat_id : cat_id},function(data, status){
+            console.log(data);
+            $('#subcategoria').html(data);
+        });
+    });
+    updateInformacion(tick_id)
+}
+function setSubcategoria(cat_id,cats_id){
+    $.post("../../controller/subcategoria.php?op=combo",{cat_id : cat_id},function(data, status){
+        $('#subcategoria').html(data);
+        selectCategoria(cats_id)
+    });
+    
+}
+function selectCategoria(cats_id){
+    const select2   = document.querySelector('#subcategoria');
+    select2.value   = cats_id 
+}
+function updateInformacion(tick_id){
+    var boton = document.getElementById("botonUpdate");
+    boton.addEventListener("click",function(){
+         /* TODO: validamos si los campos tienen informacion antes de guardar */
+        if ($('#subcategoria').val() == 0 || $('#categoriaId').val() == 0){
+            swal("Advertencia!", "Campos Vacios", "warning");
+        }else{
+            let formData = new FormData()
+            formData.append('tick_id',tick_id)
+            formData.append('cat_id',$('#categoriaId').val(),)
+            formData.append('cats_id',$('#subcategoria').val())
+            /* TODO: Guardar Ticket */
+            $.ajax({
+                url: "../../controller/ticket.php?op=updateTicketInformacion",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(data){
+                    /* TODO: Alerta de Confirmacion */
+                    swal("Correcto!", "Guardado Correctamente", "success");
+                }
+            });
+        }
+    })
+}
 init();
                                                                     

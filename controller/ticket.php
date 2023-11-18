@@ -55,7 +55,10 @@
             }
             echo json_encode($datos);
             break;
-
+        /**ACTUALIZAR INFORMACION CATEGORIA - SUBCATEOGIRA */
+        case "updateTicketInformacion":
+            $ticket->updateTicketInformacion($_POST["tick_id"],$_POST["cat_id"],$_POST["cats_id"]);
+            break;
         /* TODO: Actualizamos el ticket a cerrado y adicionamos una linea adicional */
         case "update":
             $ticket->update_ticket($_POST["tick_id"]);
@@ -354,6 +357,7 @@
                     $output["tick_id"] = $row["tick_id"];
                     $output["usu_id"] = $row["usu_id"];
                     $output["cat_id"] = $row["cat_id"];
+                    $output["cats_id"] = $row["cats_id"];
 
                     $output["tick_titulo"] = $row["tick_titulo"];
                     $output["tick_descrip"] = $row["tick_descrip"];
