@@ -9,7 +9,7 @@ $(document).ready(function(){
     });
     let rol_id =  $('#rol_idx').val();
     //administrador puede editar la categoria y subcategoria
-    if(rol_id == 3) {  setCombos(tick_id) }
+    if(rol_id == 3) { setCombos(tick_id) }
     listardetalle(tick_id);
     /* TODO: Inicializamos summernotejs */
     $('#tickd_descrip').summernote({
@@ -295,6 +295,7 @@ function listardetalle(tick_id){
 }
 //CATEGORIAS Y SUBCATEGORIAS
 function setCombos(tick_id){
+
     /* TODO: Llenar Combo categoria */
     $.post("../../controller/categoria.php?op=combo",function(data, status){
         $('#categoriaId').html(data);
@@ -308,6 +309,8 @@ function setCombos(tick_id){
         });
     });
     updateInformacion(tick_id)
+    //activarUpdate
+    activarUpdate()
 }
 function setSubcategoria(cat_id,cats_id){
     $.post("../../controller/subcategoria.php?op=combo",{cat_id : cat_id},function(data, status){
@@ -344,6 +347,28 @@ function updateInformacion(tick_id){
                 }
             });
         }
+    })
+}
+function activarUpdate(){
+    var boton = document.getElementById("botonChangeValores");
+    //mostrar
+    boton.addEventListener("click",function(){
+        $("#categoriaId").prop("disabled", false);
+        $("#subcategoria").prop("disabled", false);
+        $("#botonUpdate").show();
+        //acciones
+        $("#botonChangeValores").hide();
+        $("#botonDesactivarCambios").show();
+    })
+    //desactivar 
+    var botonDesactivar = document.getElementById("botonDesactivarCambios");
+    botonDesactivar.addEventListener("click",function(){
+        $("#categoriaId").prop("disabled", true);
+        $("#subcategoria").prop("disabled", true);
+        $("#botonUpdate").hide();
+        //acciones
+        $("#botonChangeValores").show();
+        $("#botonDesactivarCambios").hide();
     })
 }
 init();

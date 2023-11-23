@@ -53,14 +53,14 @@ if (isset($_SESSION["usu_id"])) {
                     <div class="col-lg-4">
                       <fieldset class="form-group">
                         <label class="form-label semibold" for="exampleInput">Categoria</label>
-                        <select id="categoriaId" name="categoriaId" class="form-control">
+                        <select id="categoriaId" disabled name="categoriaId" class="form-control">
                         </select>
                       </fieldset>
                     </div>
                     <div class="col-lg-4">
                       <fieldset class="form-group">
                         <label class="form-label semibold" for="exampleInput">SubCategoria</label>
-                        <select id="subcategoria" name="subcategoria" class="form-control">
+                        <select id="subcategoria" disabled name="subcategoria" class="form-control">
                         </select>
                       </fieldset>
                     </div>
@@ -71,7 +71,9 @@ if (isset($_SESSION["usu_id"])) {
                       </fieldset>
                     </div>
                     <div class="col-lg-12">
-                      <button id="botonUpdate" class="btn btn-rounded btn-inline btn-primary">Guardar</button>
+                      <button id="botonUpdate"            class="btn btn-rounded btn-inline btn-primary activarUpdate" style="display:none;">Guardar</button>
+                      <button id="botonChangeValores"     class="btn btn-rounded btn-inline btn-default ">Activar cambios</button>
+                      <button id="botonDesactivarCambios" class="btn btn-rounded btn-inline btn-warning " style="display:none;">Desactivar cambios</button>
                     </div>
                   <?php
                 }else{
