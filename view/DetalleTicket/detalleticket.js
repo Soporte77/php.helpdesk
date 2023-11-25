@@ -343,6 +343,7 @@ function updateInformacion(tick_id){
                 processData: false,
                 success: function(data){
                     /* TODO: Alerta de Confirmacion */
+                    desativarCampos()
                     swal("Correcto!", "Guardado Correctamente", "success");
                 }
             });
@@ -363,13 +364,16 @@ function activarUpdate(){
     //desactivar 
     var botonDesactivar = document.getElementById("botonDesactivarCambios");
     botonDesactivar.addEventListener("click",function(){
-        $("#categoriaId").prop("disabled", true);
-        $("#subcategoria").prop("disabled", true);
-        $("#botonUpdate").hide();
-        //acciones
-        $("#botonChangeValores").show();
-        $("#botonDesactivarCambios").hide();
+        desativarCampos()
     })
+}
+function desativarCampos(){
+    $("#categoriaId").prop("disabled", true);
+    $("#subcategoria").prop("disabled", true);
+    $("#botonUpdate").hide();
+    //acciones
+    $("#botonChangeValores").show();
+    $("#botonDesactivarCambios").hide();
 }
 init();
                                                                     
