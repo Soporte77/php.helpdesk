@@ -1,7 +1,6 @@
 var tabla;
 function init(){
 }
-//quiero una funcion de javascript que me ayude con la suma de 2 numeros
 $(document).ready(function(){
     var usu_id = $('#user_idx').val();
 
