@@ -170,7 +170,110 @@
             $sql->execute();
             return $resultado=$sql->fetchAll();
         }
-
+        //GRAFICO SOPORTE
+        public function graficoSoporte(){
+            $conectar= parent::conexion();
+            parent::set_names();
+            $sql="SELECT 
+            (
+                SELECT COUNT(*)  
+                FROM tm_ticket t
+                WHERE t.tick_estado = 'Cerrado'
+                AND t.tick_estre = '5'
+                AND t.usu_asig = u.usu_id
+            ) AS estrella5,
+            (
+                SELECT COUNT(*)  
+                FROM tm_ticket t
+                WHERE t.tick_estado = 'Cerrado'
+                AND t.tick_estre = '4'
+                AND t.usu_asig = u.usu_id
+            ) AS estrella4
+            ,
+            (
+                SELECT COUNT(*)  
+                FROM tm_ticket t
+                WHERE t.tick_estado = 'Cerrado'
+                AND t.tick_estre = '3'
+                AND t.usu_asig = u.usu_id
+            ) AS estrella3,
+            (
+                SELECT COUNT(*)  
+                FROM tm_ticket t
+                WHERE t.tick_estado = 'Cerrado'
+                AND t.tick_estre = '2'
+                AND t.usu_asig = u.usu_id
+            ) AS estrella2,
+            (
+                SELECT COUNT(*)  
+                FROM tm_ticket t
+                WHERE t.tick_estado = 'Cerrado'
+                AND t.tick_estre = '1'
+                AND t.usu_asig = u.usu_id
+            ) AS estrella1
+            ,u.*
+            FROM tm_usuario u
+            WHERE u.rol_id = '2'";
+            $sql=$conectar->prepare($sql);
+            $sql->execute();
+            $resultado = $resultado=$sql->fetchAll();
+            foreach($resultado as $key => $item){
+                $valor5 = $item['estrella5'];
+                $valor4 = $item['estrella4'];
+                $valor3 = $item['estrella3'];
+                $valor2 = $item['estrella2'];
+                $valor1 = $item['estrella1'];
+                //PROCESO
+                $total5 = $this->algoritmoRestarParaGraficoSoporte($item['estrella5'],$item,$valor4,$valor3,$valor2,$valor1);
+                $total4 = $this->algoritmoRestarParaGraficoSoporte($item['estrella4'],$item,$valor5,$valor3,$valor2,$valor1);
+                $total3 = $this->algoritmoRestarParaGraficoSoporte($item['estrella3'],$item,$valor5,$valor4,$valor2,$valor1);
+                $total2 = $this->algoritmoRestarParaGraficoSoporte($item['estrella2'],$item,$valor5,$valor4,$valor3,$valor1);
+                $total1 = $this->algoritmoRestarParaGraficoSoporte($item['estrella1'],$item,$valor5,$valor4,$valor3,$valor2);
+                $datos[$key] = [
+                    'estrella5'         => $item['estrella5'],
+                    'estrella4'         => $item['estrella4'],
+                    'estrella3'         => $item['estrella3'],
+                    'estrella2'         => $item['estrella2'],
+                    'estrella1'         => $item['estrella1'],
+                    'usu_nom'           => $item['usu_nom'],
+                    'usu_ape'           => $item['usu_ape'],
+                    'usu_id'            => $item['usu_id'],
+                    'total5'            => $total5,
+                    'total4'            => $total4,
+                    'total3'            => $total3,
+                    'total2'            => $total2,
+                    'total1'            => $total1,
+                ];
+            }
+            return $datos;
+        }
+        public function algoritmoRestarParaGraficoSoporte($estrella,$array,$valor1,$valor2,$valor3,$valor4){
+            $contador = 0;
+            if($estrella > $valor1) { ++$contador; }
+            if($estrella > $valor2) { ++$contador; }
+            if($estrella > $valor3) { ++$contador; }
+            if($estrella > $valor4) { ++$contador; }
+            return $contador;            
+        }
+        public function mostrarCalificaciones($usu_id,$calificacion){
+            $conectar= parent::conexion();
+            parent::set_names();
+            $sql="SELECT u.*,t.fech_cierre,t.tick_coment
+            FROM tm_ticket t
+            LEFT JOIN tm_usuario u ON t.usu_id = u.usu_id
+            WHERE usu_asig = ?
+            AND tick_estre = ?
+            AND u.rol_id = '1'
+            order by t.fech_cierre desc
+            ";
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, $usu_id);
+            $sql->bindValue(2, $calificacion);
+            $sql->execute();
+            //haz un update de usu_id 
+            return $resultado=$sql->fetchAll();
+            
+        }
         /* TODO: Actualizar contraseña del usuario */
         public function update_usuario_pass($usu_id,$usu_pass){
             $conectar= parent::conexion();

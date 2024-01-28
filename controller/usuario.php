@@ -132,6 +132,204 @@
         case "password":
             $usuario->update_usuario_pass($_POST["usu_id"],$_POST["usu_pass"]);
             break;
+        
+        /* TODO: Formato Json segun cantidad de ticket por categoria por usuario */
+        case "graficoSoporte":
+        $datos=$usuario->graficoSoporte();  
+        $html = "";
+        if(is_array($datos)==true and count($datos)>0){
+            foreach($datos as $row)
+            {
+                $html.="
+                    <div class='col-lg-4'>
+                        <div class='row'>
+                            <div class='col-md-12'>
+                                <div class='card' style='padding:15px;'>
+                                    <div style='display: flex;justify-content: center;'>
+                                        <img src='https://cdn-icons-png.flaticon.com/512/8943/8943376.png' style='border-radius: 50%;margin:10px;' width='40'  alt='Imagen soporte'>
+                                    </div>
+                                    <div class='card-body'>
+                                    "
+                                    ."<p class='card-text text-center'>".$row['usu_nom']. " ". $row['usu_ape']."</p>
+                                        <div class='row' style='cursor:pointer'  onClick='verUsuarios(".$row['usu_id'].",5".");'>
+                                            <div class='col-lg-9'>
+                                                <div class='d-flex align-items-center mb-2'>
+                                                    <div class='rating-bar-container'>
+                                                        <div class='rating-bar-full rounded' style='height: 1rem;'> ";
+                                                            if ($row['total5'] == 5){
+                                                                $html.="<div class='rating-bar-full rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                            if ($row['total5'] == 4){
+                                                                $html.="<div class='rating-bar-80 rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                            if ($row['total5'] == 3){
+                                                                $html.="<div class='rating-bar-60 rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                            if ($row['total5'] == 3){
+                                                                $html.="<div class='rating-bar-45 rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                            if ($row['total5'] == 1){
+                                                                $html.="<div class='rating-bar-30 rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                        $html.="
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class='col-lg-3'>
+                                                5 <i class='fas fa-star'></i>
+                                            </div>
+                                        </div>
+                                        <div class='row' style='cursor:pointer' onClick='verUsuarios(".$row['usu_id'].",4".");'>
+                                            <div class='col-lg-9'>
+                                                <div class='d-flex align-items-center mb-2'>
+                                                    <div class='rating-bar-container'>
+                                                        <div class='rating-bar-full rounded' style='height: 1rem;'> ";
+                                                            if ($row['total4'] == 5){
+                                                                $html.="<div class='rating-bar-full rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                            if ($row['total4'] == 4){
+                                                                $html.="<div class='rating-bar-80 rounded'  style='height: 1rem;'></div>";
+                                                            }
+                                                            if ($row['total4'] == 3){
+                                                                $html.="<div class='rating-bar-60 rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                            if ($row['total4'] == 2){
+                                                                $html.="<div class='rating-bar-45 rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                            if ($row['total4'] == 1){
+                                                                $html.="<div class='rating-bar-30 rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                        $html.="
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class='col-lg-3'>
+                                                4 <i class='fas fa-star'></i>
+                                            </div>
+                                        </div>
+                                        <div class='row' style='cursor:pointer'  onClick='verUsuarios(".$row['usu_id'].",3".");'>
+                                            <div class='col-lg-9'>
+                                                <div class='d-flex align-items-center mb-2'>
+                                                    <div class='rating-bar-container'>
+                                                        <div class='rating-bar-full rounded' style='height: 1rem;'> ";
+                                                            if ($row['total3'] == 5){
+                                                                $html.="<div class='rating-bar-full rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                            if ($row['total3'] == 4){
+                                                                $html.="<div class='rating-bar-80 rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                            if ($row['total3'] == 3){
+                                                                $html.="<div class='rating-bar-60 rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                            if ($row['total3'] == 2){
+                                                                $html.="<div class='rating-bar-45 rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                            if ($row['total3'] == 1){
+                                                                $html.="<div class='rating-bar-30 rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                        $html.="
+                                                        </div>
+                                                    </div>     
+                                                </div>
+                                            </div>
+                                            <div class='col-lg-3'>
+                                                3 <i class='fas fa-star'></i>
+                                            </div>
+                                        </div>
+                                        <div class='row' style='cursor:pointer'  onClick='verUsuarios(".$row['usu_id'].",2".");'>
+                                            <div class='col-lg-9'>
+                                                <div class='d-flex align-items-center mb-2'>
+                                                    <div class='rating-bar-container'>
+                                                        <div class='rating-bar-full rounded' style='height: 1rem;'> ";
+                                                            if ($row['total2'] == 5){
+                                                                $html.="<div class='rating-bar-full rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                            if ($row['total2'] == 4){
+                                                                $html.="<div class='rating-bar-80 rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                            if ($row['total2'] == 3){
+                                                                $html.="<div class='rating-bar-60 rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                            if ($row['total2'] == 2){
+                                                                $html.="<div class='rating-bar-45 rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                            if ($row['total2'] == 1){
+                                                                $html.="<div class='rating-bar-30 rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                        $html.="
+                                                        </div>
+                                                    </div> 
+                                                </div>
+                                            </div>
+                                            <div class='col-lg-3'>
+                                                2 <i class='fas fa-star'></i>
+                                            </div>
+                                        </div>
+                                        <div class='row' style='cursor:pointer'  onClick='verUsuarios(".$row['usu_id'].",1".");'>
+                                            <div class='col-lg-9'>
+                                                <div class='d-flex align-items-center mb-2'>
+                                                    <div class='rating-bar-container'>
+                                                        <div class='rating-bar-full rounded' style='height: 1rem;'> ";
+                                                            if ($row['total1'] == 5){
+                                                                $html.="<div class='rating-bar-full rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                            if ($row['total1'] == 4){
+                                                                $html.="<div class='rating-bar-80 rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                            if ($row['total1'] == 3){
+                                                                $html.="<div class='rating-bar-60 rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                            if ($row['total1'] == 2){
+                                                                $html.="<div class='rating-bar-45 rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                            if ($row['total1'] == 1){
+                                                                $html.="<div class='rating-bar-30 rounded' style='height: 1rem;'></div>";
+                                                            }
+                                                        $html.="
+                                                        </div>
+                                                    </div>     
+                                                </div>
+                                            </div>
+                                            <div class='col-lg-3'>
+                                                1 <i class='fas fa-star' style='margin-left:4px;'></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ";
+            }
+            
+            // Elimina los saltos de línea y espacios innecesarios
+            $html = str_replace(array("\r\n", "\r", "\n", '  '), '', $html);
+        }
+        // echo $html;
+        echo json_encode($html);
+        break;
+        case "mostrarCalificaciones":
+            $html = "";
+            $datos=$usuario->mostrarCalificaciones($_POST["usu_id"],$_POST["calificacion"]);  
+            $data= Array();
+            foreach($datos as $row){
+                $html.="
+                <tr>
+                <td>".$row['usu_nom']."</td>
+                <td>".$row['usu_ape']."</td>
+                <td>".$row['usu_correo']."</td>
+                <td>".$row['fech_cierre']."</td>
+                <td>".$row['tick_coment']."</td>
+                </tr>
+                ";
+                 // Elimina los saltos de línea y espacios innecesarios
+                 $html = str_replace(array("\r\n", "\r", "\n", '  '), '', $html);
+            }
 
+            echo json_encode($html);
+            // echo json_encode($datos);
+        break;
     }
 ?>

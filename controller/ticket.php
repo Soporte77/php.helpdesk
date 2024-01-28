@@ -428,7 +428,7 @@
             break;
 
         /* TODO: Total de ticket para vista de soporte */
-        case "total";
+        case "total":
             $datos=$ticket->get_ticket_total();  
             if(is_array($datos)==true and count($datos)>0){
                 foreach($datos as $row)

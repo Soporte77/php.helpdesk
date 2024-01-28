@@ -6,6 +6,7 @@
 <html>
     <?php require_once("../MainHead/head.php");?>
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+
 	<title>Peticiones</>::Home</title>
 </head>
 <body class="with-side-menu">
@@ -58,20 +59,85 @@
 					<div id="divgrafico" style="height: 250px;"></div>
 				</div>
 			</section>
-
+			<!--SOPORTE TICKETS-->
+			<?php
+				if($_SESSION['rol_id'] == '3'){
+					?>
+						<div class="container mt-5">
+							<h3>Datos de soporte</h3>
+							<div id="lblDatosSoporte" class="row">
+								
+							</div>
+						</div>
+					<?php
+				}
+				?>
+		
+			</div>
 		</div>
 	</div>
 	<!-- Contenido -->
-
+	<?php require_once("modalCalificaciones.php");?>
 	<?php require_once("../MainJs/js.php");?>
-
 	<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 
 	<script type="text/javascript" src="home.js"></script>
 
 	<script type="text/javascript" src="../notificacion.js"></script>
+	<!-- Contenido -->
 
+	<script>
+        // Controladores de botones personalizados
+        $('#prevBtn').click(function() {
+            $('#cardSlider').carousel('prev');
+        });
+
+        $('#nextBtn').click(function() {
+            $('#cardSlider').carousel('next');
+        });
+    </script>
+	<style>
+        .rating-bar-container {
+            width: 75%;
+			margin-left: 20px;
+			margin-top: 15px;
+        }
+        .rating-bar-full {
+            width: 100%;
+			background-color: rgba(128, 128, 128, 0.5);
+			border-radius: 5px;
+        }
+        .rating-bar-80 {
+            width: 80%;
+            background-color: #6c757d;
+			border-radius: 5px;
+        }
+        .rating-bar-60 {
+            width: 60%;
+            background-color: #6c757d;
+			border-radius: 5px;
+        }
+        .rating-bar-45 {
+            width: 45%;
+            background-color: #6c757d;
+			border-radius: 5px;
+        }
+        .rating-bar-30 {
+            width: 30%;
+            background-color: #6c757d;
+			border-radius: 5px;
+        }
+        .rating-bar-15 {
+            width: 15%;
+            background-color: #6c757d;
+			border-radius: 5px;
+        }
+		.fa-star{
+			color: rgba(128, 128, 128, 0.5);
+			margin-top: 15px;
+		}
+    </style>
 </body>
 </html>
 <?php
