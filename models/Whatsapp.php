@@ -5,6 +5,9 @@ require_once("../Models/Ticket.php");
 
 class Whastapp extends Conectar{
 
+    protected $account_sid = 'AC5f90efa5d584b2d87da6047c3fb82eac';
+    protected $auth_token = '042679e2ec7c2f24134e7e79a55ed315';
+
     /* TODO: Enviar alerta por Whastapp de ticket Abierto */
     public function w_ticket_abierto($tick_id){
         $ticket = new Ticket();
@@ -17,31 +20,41 @@ class Whastapp extends Conectar{
             $telefono = $row["usu_telf"];
         }
 
-        /* TODO: Credenciales y ruta del proveedor Chat API */
-        $apiURL = 'https://api.chat-api.com/instance406742/';
-        $token = 'b4kgecozys8jhie3';
+        //TODO: Número de teléfono de destino (con el prefijo internacional)
+        $to = 'whatsapp:'.$telefono.'';
 
-        /* TODO:Generar JSON */
-        $data = json_encode(
-            array(
-                'chatId'=>"".$telefono."@c.us",
-                'body'=>"Ticket Abierto ".$id." : ".$titulo." Categoria : ".$categoria." SubCategoria : ".$subcategoria.""
-            )
+        //TODO: Número de teléfono remitente (con el prefijo internacional)
+        $from = 'whatsapp:+14155238886';
+
+        $message = 'Estimado se ha recepcionado su ticket con nro: '.$id.' y '.$titulo.' de la categoria: '.$categoria.' y subcategoria: '.$subcategoria.'.';
+
+        //TODO: URL de la API de Twilio para enviar mensajes de WhatsApp
+        $url = 'https://api.twilio.com/2010-04-01/Accounts/' .  $this->account_sid . '/Messages.json';
+
+        //TODO: Datos para enviar el mensaje
+        $data = array(
+            'To' => $to,
+            'From' => $from,
+            'Body' => $message
         );
 
-        $url = $apiURL.'message?token='.$token;
-        $options = stream_context_create(
-            array('http' =>
-                array(
-                    'method'  => 'POST',
-                    'header'  => 'Content-type: application/json',
-                    'content' => $data
-                )
-            )
-        );
+        //TODO: Configurar la solicitud HTTP
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_USERPWD, $this->account_sid . ':' . $this->auth_token);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
-        $response = file_get_contents($url,false,$options);
-        echo $response; exit;
+        //TODO: Realizar la solicitud
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        //TODO: Procesar la respuesta
+        if ($response) {
+            return 'Mensaje enviado con éxito.';
+        } else {
+            return 'Error al enviar el mensaje: ' . curl_error($ch);
+        }
     }
 
     /* TODO: Enviar alerta por Whastapp de ticket Cerrado */
@@ -51,74 +64,149 @@ class Whastapp extends Conectar{
         foreach ($datos as $row){
             $id = $row["tick_id"];
             $titulo = $row["tick_titulo"];
+            $categoria = $row["cat_nom"];
+            $subcategoria = $row["cats_nom"];
             $telefono = $row["usu_telf"];
         }
 
-        /* TODO: Credenciales y ruta del proveedor Chat API */
-        $apiURL = 'https://api.chat-api.com/instance406742/';
-        $token = 'b4kgecozys8jhie3';
+        //TODO: Número de teléfono de destino (con el prefijo internacional)
+        $to = 'whatsapp:'.$telefono.'';
 
-        /* TODO:Generar JSON */
-        $data = json_encode(
-            array(
-                'chatId'=>"".$telefono."@c.us",
-                'body'=>"Ticket Cerrado ".$id." : ".$titulo.""
-            )
+        //TODO: Número de teléfono remitente (con el prefijo internacional)
+        $from = 'whatsapp:+14155238886';
+
+        $message = 'Estimado su ticket con nro: '.$id.' y '.$titulo.' de la categoria: '.$categoria.' y subcategoria: '.$subcategoria.'. Ha sido Cerrado por favor validar.';
+
+        //TODO: URL de la API de Twilio para enviar mensajes de WhatsApp
+        $url = 'https://api.twilio.com/2010-04-01/Accounts/' .  $this->account_sid . '/Messages.json';
+
+        //TODO: Datos para enviar el mensaje
+        $data = array(
+            'To' => $to,
+            'From' => $from,
+            'Body' => $message
         );
 
-        $url = $apiURL.'message?token='.$token;
-        $options = stream_context_create(
-            array('http' =>
-                array(
-                    'method'  => 'POST',
-                    'header'  => 'Content-type: application/json',
-                    'content' => $data
-                )
-            )
-        );
+        //TODO: Configurar la solicitud HTTP
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_USERPWD, $this->account_sid . ':' . $this->auth_token);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
-        $response = file_get_contents($url,false,$options);
-        echo $response; exit;
+        //TODO: Realizar la solicitud
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        //TODO: Procesar la respuesta
+        if ($response) {
+            return 'Mensaje enviado con éxito.';
+        } else {
+            return 'Error al enviar el mensaje: ' . curl_error($ch);
+        }
+
     }
 
     /* TODO: Enviar alerta por Whastapp de ticket Asignado */
-    public function w_ticket_asignado($tick_id){
+    public function w_ticket_asignado_usuario($tick_id){
         $ticket = new Ticket();
         $datos = $ticket->listar_ticket_x_id($tick_id);
         foreach ($datos as $row){
             $id = $row["tick_id"];
             $titulo = $row["tick_titulo"];
+            $categoria = $row["cat_nom"];
+            $subcategoria = $row["cats_nom"];
             $telefono = $row["usu_telf"];
         }
 
-        /* TODO: Credenciales y ruta del proveedor Chat API */
-        $apiURL = 'https://api.chat-api.com/instance406742/';
-        $token = 'b4kgecozys8jhie3';
+        //TODO: Número de teléfono de destino (con el prefijo internacional)
+        $to = 'whatsapp:'.$telefono.'';
 
-        /* TODO:Generar JSON */
-        $data = json_encode(
-            array(
-                'chatId'=>"".$telefono."@c.us",
-                'body'=>"Ticket Asignado ".$id." : ".$titulo.""
-            )
+        //TODO: Número de teléfono remitente (con el prefijo internacional)
+        $from = 'whatsapp:+14155238886';
+
+        $message = '(Usuario)Estimado su ticket con nro: '.$id.' y '.$titulo.' de la categoria: '.$categoria.' y subcategoria: '.$subcategoria.'. Ha sido asignado para su soporte y asistencia.';
+
+        //TODO: URL de la API de Twilio para enviar mensajes de WhatsApp
+        $url = 'https://api.twilio.com/2010-04-01/Accounts/' .  $this->account_sid . '/Messages.json';
+
+        //TODO: Datos para enviar el mensaje
+        $data = array(
+            'To' => $to,
+            'From' => $from,
+            'Body' => $message
         );
 
-        $url = $apiURL.'message?token='.$token;
-        $options = stream_context_create(
-            array('http' =>
-                array(
-                    'method'  => 'POST',
-                    'header'  => 'Content-type: application/json',
-                    'content' => $data
-                )
-            )
-        );
+        //TODO: Configurar la solicitud HTTP
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_USERPWD, $this->account_sid . ':' . $this->auth_token);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
-        $response = file_get_contents($url,false,$options);
-        echo $response; exit;
+        //TODO: Realizar la solicitud
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        //TODO: Procesar la respuesta
+        if ($response) {
+            return 'Mensaje enviado con éxito.';
+        } else {
+            return 'Error al enviar el mensaje: ' . curl_error($ch);
+        }
+
     }
 
+    public function w_ticket_asignado_soporte($tick_id){
+        $ticket = new Ticket();
+        $datos = $ticket->listar_ticket_x_id($tick_id);
+        foreach ($datos as $row){
+            $id = $row["tick_id"];
+            $titulo = $row["tick_titulo"];
+            $categoria = $row["cat_nom"];
+            $subcategoria = $row["cats_nom"];
+        }
 
+        $usuario = new Usuario();
+        $datos2 = $usuario->get_usuario_x_id($datos[0]["usu_asig"]);
+
+        //TODO: Número de teléfono de destino (con el prefijo internacional)
+        $to = 'whatsapp:'.$datos2[0]["usu_telf"].'';
+
+        //TODO: Número de teléfono remitente (con el prefijo internacional)
+        $from = 'whatsapp:+14155238886';
+
+        $message = '(Soporte)Estimado su ticket con nro: '.$id.' y '.$titulo.' de la categoria: '.$categoria.' y subcategoria: '.$subcategoria.'. Ha sido asignado para su soporte y asistencia.';
+
+        //TODO: URL de la API de Twilio para enviar mensajes de WhatsApp
+        $url = 'https://api.twilio.com/2010-04-01/Accounts/' .  $this->account_sid . '/Messages.json';
+
+        //TODO: Datos para enviar el mensaje
+        $data = array(
+            'To' => $to,
+            'From' => $from,
+            'Body' => $message
+        );
+
+        //TODO: Configurar la solicitud HTTP
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_USERPWD, $this->account_sid . ':' . $this->auth_token);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+
+        //TODO: Realizar la solicitud
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        //TODO: Procesar la respuesta
+        if ($response) {
+            return 'Mensaje enviado con éxito.';
+        } else {
+            return 'Error al enviar el mensaje: ' . curl_error($ch);
+        }
+
+    }
 }
 
 ?>

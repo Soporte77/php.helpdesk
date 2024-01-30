@@ -13,6 +13,10 @@
 
     require_once("../models/Documento.php");
     $documento = new Documento();
+
+    require_once("../models/Whatsapp.php");
+    $whatsapp = new Whastapp();
+
     /*TODO: opciones del controlador Ticket*/
     switch($_GET["op"]){
 
@@ -53,6 +57,7 @@
                     }
                 }
             }
+           $data =  $whatsapp->w_ticket_abierto($datos[0]["tick_id"]);
             echo json_encode($datos);
             break;
         /**ACTUALIZAR INFORMACION CATEGORIA - SUBCATEOGIRA */
@@ -63,17 +68,22 @@
         case "update":
             $ticket->update_ticket($_POST["tick_id"]);
             $ticket->insert_ticketdetalle_cerrar($_POST["tick_id"],$_POST["usu_id"]);
+            $whatsapp->w_ticket_cerrado($_POST["tick_id"]);
             break;
 
         /* TODO: Reabrimos el ticket y adicionamos una linea adicional */
         case "reabrir":
             $ticket->reabrir_ticket($_POST["tick_id"]);
             $ticket->insert_ticketdetalle_reabrir($_POST["tick_id"],$_POST["usu_id"]);
+
+            $whatsapp->w_ticket_cerrado($_POST["tick_id"]);
             break;
 
         /* TODO: Asignamos el ticket  */
         case "asignar":
             $ticket->update_ticket_asignacion($_POST["tick_id"],$_POST["usu_asig"]);
+            $whatsapp->w_ticket_asignado_usuario($_POST["tick_id"]);
+            $whatsapp->w_ticket_asignado_soporte($_POST["tick_id"]);
             break;
 
         /* TODO: Listado de tickets segun usuario,formato json para Datatable JS */
