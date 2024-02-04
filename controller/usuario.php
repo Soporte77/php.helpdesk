@@ -9,12 +9,60 @@
     switch($_GET["op"]){
         /* TODO: Guardar y editar, guardar si el campo usu_id esta vacio */
         case "guardaryeditar":
+            $idUsuario =0;
             if(empty($_POST["usu_id"])){       
-                $usuario->insert_usuario($_POST["usu_nom"],$_POST["usu_ape"],$_POST["usu_correo"],$_POST["usu_pass"],$_POST["rol_id"],$_POST["usu_telf"]);     
+               $valor = $usuario->insert_usuario($_POST["usu_nom"],$_POST["usu_ape"],$_POST["usu_correo"],$_POST["usu_pass"],$_POST["rol_id"],$_POST["usu_telf"]);     
+               $idUsuario = $valor; 
             }
             else {
                 $usuario->update_usuario($_POST["usu_id"],$_POST["usu_nom"],$_POST["usu_ape"],$_POST["usu_correo"],$_POST["usu_pass"],$_POST["rol_id"],$_POST["usu_telf"]);
+                $idUsuario = $_POST["usu_id"];
             }
+            ///====GUARDAR FOTO===================
+            /* TODO: Validamos si vienen archivos desde la Vista */
+            if (empty($_FILES['files']['name'])){
+
+            }else{
+                ///eliminamos la foto anterior
+                $fotoAnterior = $_POST["textFoto"];
+                if($fotoAnterior == null){ }
+                else{
+                    $ruta = "../public/document/"."usuario/".$idUsuario."/";
+                    $ruta = "../public/document/"."usuario/".$idUsuario."/".$fotoAnterior;
+                    // if (file_exists($ruta)) {
+                    //     unlink($ruta);
+                    // }
+                    if(file_exists($ruta)) {
+                        if(file_exists($ruta) ){
+                            unlink($ruta);
+                        }
+                    }
+                }
+                //GUARDAR FOTO NUEVA
+                /* TODO:Contar Cantidad de Archivos desde la Vista */
+                $countfiles = count($_FILES['files']['name']);
+                /* TODO: Generamos ruta segun el ID del ultimo registro insertado */
+                $ruta = "../public/document/"."usuario/".$idUsuario."/";
+                $files_arr = array();
+
+                /* TODO: Preguntamos si la ruta existe, en caso no exista la creamos */
+                if (!file_exists($ruta)) {
+                    mkdir($ruta, 0777, true);
+                }
+
+                /* TODO:Recorremos los archivos, y insertamos tantos detalles como documentos vinieron desde la vista */
+                for ($index = 0; $index < $countfiles; $index++) {
+                    $doc1 = $_FILES['files']['tmp_name'][$index];
+                    $destino = $ruta.$_FILES['files']['name'][$index];
+
+                    /* TODO: Insertamos Documentos */
+                    $usuario->insert_Foto( $idUsuario,$_FILES['files']['name'][$index]);
+
+                    /* TODO: Movemos los archivos hacia la carpeta creada */
+                    move_uploaded_file($doc1,$destino);
+                }
+            }
+            echo json_encode($idUsuario);
             break;
 
         /* TODO: Listado de usuario segun formato json para el datatable */
@@ -37,7 +85,7 @@
                 if ($row["rol_id"]=="3"){
                     $sub_array[] = '<span class="label label-pill label-dark">Administrador</span>';
                 }
-
+                $sub_array[] = '<a href="../../public/document/usuario/'.$row["usu_id"].'/'.$row["foto"].'" target="_blank"><img src="../../public/document/usuario/'.$row["usu_id"].'/'.$row["foto"].'" class="img-thumbnail" width="50" height="50" /></a>';
                 $sub_array[] = '<button type="button" onClick="editar('.$row["usu_id"].');"  id="'.$row["usu_id"].'" class="btn btn-inline btn-warning btn-sm ladda-button"><i class="fa fa-edit"></i></button>';
                 $sub_array[] = '<button type="button" onClick="eliminar('.$row["usu_id"].');"  id="'.$row["usu_id"].'" class="btn btn-inline btn-danger btn-sm ladda-button"><i class="fa fa-trash"></i></button>';
                 $data[] = $sub_array;
@@ -69,6 +117,8 @@
                     $output["usu_pass"] = $row["usu_pass"];
                     $output["rol_id"] = $row["rol_id"];
                     $output["usu_telf"] = $row["usu_telf"];
+                    $output["usu_foto"] = "../../public/document/usuario/" .$row["usu_id"].'/'.$row["foto"];
+                    $output["textFoto"] = $row["foto"];
                 }
                 echo json_encode($output);
             }
@@ -145,9 +195,9 @@
                         <div class='row'>
                             <div class='col-md-12'>
                                 <div class='card' style='padding:15px;'>
-                                    <div style='display: flex;justify-content: center;'>
-                                        <img src='https://cdn-icons-png.flaticon.com/512/8943/8943376.png' style='border-radius: 50%;margin:10px;' width='40'  alt='Imagen soporte'>
-                                    </div>
+                                    <div style='display: flex;justify-content: center;'>";
+                                    $html .= "<img src='../../public/document/usuario/".$row['usu_id']."/".$row['foto']."' style='margin:10px;border-radius:50%;' width='100' height='80' alt='Imagen soporte'>";
+                                    $html.="</div>
                                     <div class='card-body'>
                                     "
                                     ."<p class='card-text text-center'>".$row['usu_nom']. " ". $row['usu_ape']."</p>

@@ -49,7 +49,24 @@
             $sql->bindValue(5, $rol_id);
             $sql->bindValue(6, $usu_telf);
             $sql->execute();
-            return $resultado=$sql->fetchAll();
+            $resultado=$sql->fetchAll();
+            //Obtener el ultimo id insertado
+            $sql1="select last_insert_id() as 'usu_id';";
+            $sql1=$conectar->prepare($sql1);
+            $sql1->execute();
+            $preResult = $sql1->fetchAll(pdo::FETCH_ASSOC);
+            $usu_id = $preResult[0]['usu_id'];
+            return $usu_id;
+        }
+
+        public function insert_Foto($usu_id,$doc_nom){
+            $conectar= parent::conexion();
+            /* consulta sql */
+            $sql="UPDATE tm_usuario SET foto = ? WHERE usu_id = ?";
+            $sql = $conectar->prepare($sql);
+            $sql->bindParam(1,$doc_nom);
+            $sql->bindParam(2,$usu_id);
+            $sql->execute();
         }
 
         /* TODO:Update */
@@ -238,6 +255,7 @@
                     'usu_nom'           => $item['usu_nom'],
                     'usu_ape'           => $item['usu_ape'],
                     'usu_id'            => $item['usu_id'],
+                    'foto'              => $item['foto'],
                     'total5'            => $total5,
                     'total4'            => $total4,
                     'total3'            => $total3,

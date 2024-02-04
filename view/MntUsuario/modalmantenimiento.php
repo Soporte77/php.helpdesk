@@ -44,7 +44,14 @@
                         <label class="form-label" for="usu_telf">Telefono</label>
                         <input type="text" class="form-control" id="usu_telf" name="usu_telf" placeholder="Ingrese Telefono" required>
                     </div>
-
+                    <div class="form-group">
+                        <img src="" id="usu_foto"  name="usu_foto" class="img-fluid" alt="Responsive image">
+                        <input type="text" hidden name="textFoto" id="textFoto" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label semibold" for="exampleInput">Foto</label>
+					    <input type="file" name="fileFoto" id="fileFoto" class="form-control">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-rounded btn-default" data-dismiss="modal">Cerrar</button>

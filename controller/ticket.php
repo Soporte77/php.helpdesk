@@ -82,7 +82,7 @@
         /* TODO: Asignamos el ticket  */
         case "asignar":
             $ticket->update_ticket_asignacion($_POST["tick_id"],$_POST["usu_asig"]);
-            $whatsapp->w_ticket_asignado_usuario($_POST["tick_id"]);
+            // $whatsapp->w_ticket_asignado_usuario($_POST["tick_id"]);
             $whatsapp->w_ticket_asignado_soporte($_POST["tick_id"]);
             break;
 

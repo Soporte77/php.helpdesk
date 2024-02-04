@@ -10,6 +10,7 @@ function init(){
 function guardaryeditar(e){
     e.preventDefault();
 	var formData = new FormData($("#usuario_form")[0]);
+    formData.append("files[]", $('#fileFoto')[0].files[0]);
     $.ajax({
         url: "../../controller/usuario.php?op=guardaryeditar",
         type: "POST",
@@ -22,7 +23,7 @@ function guardaryeditar(e){
             /* TODO:Ocultar Modal */
             $("#modalmantenimiento").modal('hide');
             $('#usuario_data').DataTable().ajax.reload();
-
+            
             /* TODO:Mensaje de Confirmacion */
             swal({
                 title: "HelpDesk!",
@@ -102,6 +103,8 @@ function editar(usu_id){
         $('#usu_pass').val(data.usu_pass);
         $('#rol_id').val(data.rol_id).trigger('change');
         $('#usu_telf').val(data.usu_telf);
+        $('#usu_foto').attr('src', data.usu_foto);
+        $('#textFoto').val(data.textFoto);
     }); 
 
     /* TODO: Mostrar Modal */

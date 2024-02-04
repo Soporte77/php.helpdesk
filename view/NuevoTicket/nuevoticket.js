@@ -76,14 +76,14 @@ function guardaryeditar(e){
                 console.log(data[0].tick_id);
 
                 /* TODO: Envio de alerta Email de ticket Abierto */
-                $.post("../../controller/email.php?op=ticket_abierto", {tick_id : data[0].tick_id}, function (data) {
+                // $.post("../../controller/email.php?op=ticket_abierto", {tick_id : data[0].tick_id}, function (data) {
 
-                });
+                // });
 
-                /* TODO: Envio de alerta Whaspp de ticket Abierto */
-                $.post("../../controller/whatsapp.php?op=w_ticket_abierto", {tick_id : data[0].tick_id}, function (data) {
+                // /* TODO: Envio de alerta Whaspp de ticket Abierto */
+                // $.post("../../controller/whatsapp.php?op=w_ticket_abierto", {tick_id : data[0].tick_id}, function (data) {
 
-                });
+                // });
 
                 /* TODO: Limpiar campos */
                 $('#tick_titulo').val('');
