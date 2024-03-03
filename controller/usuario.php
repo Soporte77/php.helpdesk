@@ -198,9 +198,11 @@
                                     <div style='display: flex;justify-content: center;'>";
                                     $html .= "<img src='../../public/document/usuario/".$row['usu_id']."/".$row['foto']."' style='margin:10px;border-radius:50%;' width='100' height='80' alt='Imagen soporte'>";
                                     $html.="</div>
+                                    
                                     <div class='card-body'>
                                     "
                                     ."<p class='card-text text-center'>".$row['usu_nom']. " ". $row['usu_ape']."</p>
+                                    <p class='card-text text-center'><b>Tickets</b>:".$row['totalTicket']."</p>
                                         <div class='row' style='cursor:pointer'  onClick='verUsuarios(".$row['usu_id'].",5".");'>
                                             <div class='col-lg-9'>
                                                 <div class='d-flex align-items-center mb-2'>

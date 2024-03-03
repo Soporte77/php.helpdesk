@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
     mostrar_notificacion();
-
+    setCantidadTickets();
 });
 let isFlashing = false;
 let originalTitle = document.title;
@@ -60,6 +60,25 @@ function mostrar_notificacion(){
 
 }
 
+//si es 1 de cada mes se reiniciara la cantidad de tickets
+function setCantidadTickets(){
+    console.log('holaaaa')
+    $.ajax({
+        url: "../../controller/ticket.php?op=setCantidadTickets",
+        type: "POST",
+        contentType: false,
+        processData: false,
+        success: function(data){
+            console.log(data)
+            if (data==''){
+
+            }else{
+                
+            }
+        }
+    });
+
+}
 // Función para cambiar el favicon
 function changeFavicon(newFavicon) {
 const faviconElement = document.getElementById('favicon');

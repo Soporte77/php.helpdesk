@@ -198,6 +198,7 @@
                 WHERE t.tick_estado = 'Cerrado'
                 AND t.tick_estre = '5'
                 AND t.usu_asig = u.usu_id
+                AND t.ticket_sumatoria = '1'
             ) AS estrella5,
             (
                 SELECT COUNT(*)  
@@ -205,6 +206,7 @@
                 WHERE t.tick_estado = 'Cerrado'
                 AND t.tick_estre = '4'
                 AND t.usu_asig = u.usu_id
+                AND t.ticket_sumatoria = '1'
             ) AS estrella4
             ,
             (
@@ -213,6 +215,7 @@
                 WHERE t.tick_estado = 'Cerrado'
                 AND t.tick_estre = '3'
                 AND t.usu_asig = u.usu_id
+                AND t.ticket_sumatoria = '1'
             ) AS estrella3,
             (
                 SELECT COUNT(*)  
@@ -220,6 +223,7 @@
                 WHERE t.tick_estado = 'Cerrado'
                 AND t.tick_estre = '2'
                 AND t.usu_asig = u.usu_id
+                AND t.ticket_sumatoria = '1'
             ) AS estrella2,
             (
                 SELECT COUNT(*)  
@@ -227,7 +231,15 @@
                 WHERE t.tick_estado = 'Cerrado'
                 AND t.tick_estre = '1'
                 AND t.usu_asig = u.usu_id
-            ) AS estrella1
+                AND t.ticket_sumatoria = '1'
+            ) AS estrella1,
+            (
+                SELECT COUNT(*)  
+                FROM tm_ticket t
+                WHERE t.tick_estado = 'Cerrado'
+                AND t.usu_asig = u.usu_id
+                AND t.ticket_sumatoria = '1'
+            ) AS totalTicket
             ,u.*
             FROM tm_usuario u
             WHERE u.rol_id = '2'";
@@ -240,6 +252,7 @@
                 $valor3 = $item['estrella3'];
                 $valor2 = $item['estrella2'];
                 $valor1 = $item['estrella1'];
+                $totalT = $item['totalTicket'];
                 //PROCESO
                 $total5 = $this->algoritmoRestarParaGraficoSoporte($item['estrella5'],$item,$valor4,$valor3,$valor2,$valor1);
                 $total4 = $this->algoritmoRestarParaGraficoSoporte($item['estrella4'],$item,$valor5,$valor3,$valor2,$valor1);
@@ -261,6 +274,7 @@
                     'total3'            => $total3,
                     'total2'            => $total2,
                     'total1'            => $total1,
+                    'totalTicket'       => $totalT
                 ];
             }
             return $datos;
@@ -282,6 +296,7 @@
             WHERE usu_asig = ?
             AND tick_estre = ?
             AND u.rol_id = '1'
+            AND t.ticket_sumatoria = '1'
             order by t.fech_cierre desc
             ";
             $sql=$conectar->prepare($sql);
@@ -291,6 +306,60 @@
             //haz un update de usu_id 
             return $resultado=$sql->fetchAll();
             
+        }
+        //REINCIAR CONTADOR ticket_sumatoria
+        public function reiniciarContador(){
+            //cada 1 de cada mes se reinicia el contador
+            $fecha = date('d');
+            if($fecha == '01'){
+                $conectar= parent::conexion();
+                parent::set_names();
+                //capturar el año y mes y dia
+                $fechaActual = date('Y-m-d');
+                //validar si la fecha de mi tabla ticket_fecha_configuracion es igual
+                $sql2 = "SELECT * FROM ticket_fecha_configuracion 
+                WHERE fecha_actualizacion_contador = ?
+                ";
+                $sql2=$conectar->prepare($sql2);
+                $sql2->bindValue(1, $fechaActual);
+                $sql2->execute();
+                $resultado2 = $sql2->fetchAll();
+                //si es mayor a 0 osea que ya se reinicio a 0
+                if(count($resultado2) > 0){
+                    echo "Ya se reinicio el contador de ticket_sumatoria a 0 ";
+                }else{
+                    echo "se reiniciara el contador de ticket_sumatoria a 0 ";
+                    $sql="UPDATE tm_ticket t
+                        SET ticket_sumatoria    = '0' 
+                        WHERE t.tick_estado     = 'Cerrado'
+                        AND t.ticket_sumatoria  = '1'
+                    ";
+                    $sql=$conectar->prepare($sql);
+                    $sql->execute();
+
+                    // Primero, verifica si el registro ya existe
+                    $sql_select = "SELECT COUNT(*) as count FROM ticket_fecha_configuracion";
+                    $result = $conectar->query($sql_select);
+                    $row = $result->fetch(PDO::FETCH_ASSOC);
+                    $count = $row['count'];
+
+                    if ($count > 0) {
+                        // Si el registro existe, actualiza el campo
+                        $sql_update = "UPDATE ticket_fecha_configuracion SET fecha_actualizacion_contador = ?";
+                        $sql_update = $conectar->prepare($sql_update);
+                        $sql_update->bindValue(1, $fechaActual);
+                        $sql_update->execute();
+                    } else {
+                        // Si el registro no existe, inserta un nuevo registro
+                        $sql_insert = "INSERT INTO ticket_fecha_configuracion (fecha_actualizacion_contador) VALUES (?)";
+                        $sql_insert = $conectar->prepare($sql_insert);
+                        $sql_insert->bindValue(1, $fechaActual);
+                        $sql_insert->execute();
+                    }
+                }
+            }else{
+                echo "aun no es el tiempo";
+            }
         }
         /* TODO: Actualizar contraseña del usuario */
         public function update_usuario_pass($usu_id,$usu_pass){

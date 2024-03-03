@@ -484,6 +484,9 @@
         case "encuesta":
             $ticket->insert_encuesta($_POST["tick_id"],$_POST["tick_estre"],$_POST["tick_coment"]);
             break;
-
+        case "setCantidadTickets":
+            $datos= $usuario->reiniciarContador();
+            echo  json_encode($datos);
+            break;
     }
 ?>
