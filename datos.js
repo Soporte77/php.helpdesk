@@ -4,6 +4,7 @@ function init(){
     opciones.addEventListener('change',selectRol);
 }
 
+
 $(document).ready(function() {
 });
 function selectRol(e){
