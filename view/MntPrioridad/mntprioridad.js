@@ -25,7 +25,7 @@ function guardaryeditar(e){
 
              /* TODO:Mensaje de Confirmacion */
             swal({
-                title: "HelpDesk!",
+                title: "Peticiones!",
                 text: "Completado.",
                 type: "success",
                 confirmButtonClass: "btn-success"
@@ -106,7 +106,7 @@ function editar(prio_id){
 /* TODO: Cambiar estado a eliminado en caso de confirmar mensaje */
 function eliminar(prio_id){
     swal({
-        title: "HelpDesk",
+        title: "Peticiones",
         text: "Esta seguro de Eliminar el registro?",
         type: "error",
         showCancelButton: true,
@@ -124,7 +124,7 @@ function eliminar(prio_id){
             $('#usuario_data').DataTable().ajax.reload();	
 
             swal({
-                title: "HelpDesk!",
+                title: "Peticiones!",
                 text: "Registro Eliminado.",
                 type: "success",
                 confirmButtonClass: "btn-success"

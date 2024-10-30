@@ -22,13 +22,35 @@
                     </div>
 
                     <div class="form-group">
+                        <label class="form-control-label">Numero de Empleado</label>
+                        <input class="form-control tx-uppercase" id="usu_numemp" type="text" name="usu_numemp" placeholder="Ingrese Numero de Empleado"  required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-control-label">Dependencia</label>
+                        <input class="form-control tx-uppercase" id="dep_id" type="text" name="dep_id"  />
+
+                        
+                    </div>
+                        
+     
+
+                    <div class="form-group">
+                        <label class="form-control-label">Departamento</label>
+                        <input class="form-control tx-uppercase" id="depto_id" type="text" name="depto_id"   />
+                        
+                    </div>
+                    
+
+
+                    <div class="form-group">
                         <label class="form-label" for="usu_correo">Correo Electronico</label>
                         <input type="email" class="form-control" id="usu_correo" name="usu_correo" placeholder="test@test.com" required>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label" for="usu_pass">Contraseña</label>
-                        <input type="text" class="form-control" id="usu_pass" name="usu_pass" placeholder="************" required>
+                        <input type="text" class="form-control" id="usu_pass" name="usu_pass" placeholder="************" >
                     </div>
 
                     <div class="form-group">

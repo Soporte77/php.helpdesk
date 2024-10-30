@@ -6,7 +6,7 @@
 <html>
     <?php require_once("../MainHead/head.php");?>
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
-
+	
 	<title>Peticiones</>::Home</title>
 </head>
 <body class="with-side-menu">
@@ -59,6 +59,7 @@
 					<div id="divgrafico" style="height: 250px;"></div>
 				</div>
 			</section>
+
 			<!--SOPORTE TICKETS-->
 			<?php
 				if($_SESSION['rol_id'] == '3'){
@@ -66,23 +67,26 @@
 						<div class="container mt-5">
 							<h3>Datos de soporte</h3>
 							<div id="lblDatosSoporte" class="row">
-								
+
 							</div>
 						</div>
 					<?php
 				}
 				?>
-		
+
 			</div>
 		</div>
 	</div>
 	<!-- Contenido -->
+
 	<?php require_once("modalCalificaciones.php");?>
 	<?php require_once("../MainJs/js.php");?>
+
 	<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 
 	<script type="text/javascript" src="home.js"></script>
+
 
 	<script type="text/javascript" src="../notificacion.js"></script>
 	<!-- Contenido -->
@@ -93,7 +97,7 @@
             $('#cardSlider').carousel('prev');
         });
 
-        $('#nextBtn').click(function() {
+		$('#nextBtn').click(function() {
             $('#cardSlider').carousel('next');
         });
     </script>
@@ -138,6 +142,7 @@
 			margin-top: 15px;
 		}
     </style>
+
 </body>
 </html>
 <?php

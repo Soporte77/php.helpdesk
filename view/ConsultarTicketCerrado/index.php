@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
     <?php require_once("../MainHead/head.php");?>
-	<title>Peticiones</>::Consultar Ticket</title>
+	<title>Peticiones</>::Consultar Ticket Cerrado</title>
 </head>
 <body class="with-side-menu">
 
@@ -23,10 +23,10 @@
 				<div class="tbl">
 					<div class="tbl-row">
 						<div class="tbl-cell">
-							<h3>Consultar Ticket</h3>
+							<h3>Consultar Ticket Cerrado</h3>
 							<ol class="breadcrumb breadcrumb-simple">
 								<li><a href="#">Home</a></li>
-								<li class="active">Consultar Ticket</li>
+								<li class="active">Consultar Ticket Cerrado</li>
 							</ol>
 						</div>
 					</div>
@@ -114,7 +114,7 @@
 
 	<?php require_once("../MainJs/js.php");?>
 
-	<script type="text/javascript" src="consultarticket.js"></script>
+	<script type="text/javascript" src="consultarticketcerrado.js"></script>
 
 	<script type="text/javascript" src="../notificacion.js"></script>
 

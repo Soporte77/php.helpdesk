@@ -7,12 +7,9 @@ $(document).ready(function(){
     $('#Etick_estre').rating({ 
         showCaption: false
     });
-    let rol_id =  $('#rol_idx').val();
-    //administrador puede editar la categoria y subcategoria Cambios JJ 28/11/23
-    if(rol_id == 3) { setCombos(tick_id) }
     listardetalle(tick_id);
-    //Fin Cambios JJ 28/11/23
-     /* TODO: Inicializamos summernotejs */
+
+    /* TODO: Inicializamos summernotejs */
     $('#tickd_descrip').summernote({
         height: 400,
         lang: "es-ES",
@@ -105,7 +102,6 @@ $(document).ready(function(){
         }
     }).DataTable();
 });
-
 
 var getUrlParameter = function getUrlParameter(sParam) {
     var sPageURL = decodeURIComponent(window.location.search.substring(1)),
@@ -211,7 +207,27 @@ $(document).on("click","#btncerrarticketUsuario", function(){
     listardetalleEncuesta(tick_id);
     $('#mdltitulo').html('Llene la encuesta de satisfacción');
     $("#modalEncuesta").modal('show');
-    });
+    // swal({
+    //     title: "HelpDesk",
+    //     text: "Esta seguro de Cerrar el Ticket?",
+    //     type: "warning",
+    //     showCancelButton: true,
+    //     confirmButtonClass: "btn-warning",
+    //     confirmButtonText: "Si",
+    //     cancelButtonText: "No",
+    //     closeOnConfirm: false
+    // },
+    // function(isConfirm) {
+    //     if (isConfirm) {
+    //         var tick_id = getUrlParameter('ID');
+    //         var url = window.location.href;
+    //         localStorage.setItem('rutaAnterior',url)
+    //         var rutaHastaView = url.split('/view')[0] + '/view';
+    //         var rutaEncuesta  = rutaHastaView + '/'+'encuesta/?ID='+tick_id
+    //         window.open(rutaEncuesta,'_self')
+    //     }
+    // });
+});
 function listardetalleEncuesta(tick_id){
     /* TODO: Mostra detalle de ticket */
     $.post("../../controller/ticket.php?op=mostrar", { tick_id : tick_id }, function (data) {
@@ -260,15 +276,6 @@ $(document).on("click","#btnRegresar", function(){
     let url = localStorage.rutaAnterior
     window.open(url,'_self')
 });
-
-
-$(document).on("click","#btnchatgpt", function(){
-    var tick_id = getUrlParameter('ID');
-    $.post("../../controller/chatgpt.php?op=respuestaia", {tick_id : tick_id}, function (data) {
-        $('#tickd_descrip').summernote ('code', data);
-    });
-});
-
 function listardetalle(tick_id){
     /*console.log("entro")*/
     /* TODO: Mostramos informacion de detalle de ticket */
@@ -279,17 +286,6 @@ function listardetalle(tick_id){
     /* TODO: Mostramos informacion del ticket en inputs */
     $.post("../../controller/ticket.php?op=mostrar", { tick_id : tick_id }, function (data) {
         data = JSON.parse(data);
-        let rol_id =  $('#rol_idx').val();
-        //llenar los combos para editar la categoria y subcategoria Inicio JJ 28-11-23
-        if(rol_id == 3){
-            //categoria
-            const select    = document.querySelector('#categoriaId');
-            select.value    = data.cat_id 
-            //subcategoria
-            setSubcategoria(data.cat_id,data.cats_id)
-            //fin JJ 28-11-23
-          
-        }
         $('#lblestado').html(data.tick_estado);
         $('#lbldepnom').html(data.dep_nom);
         $('#lbldeptonom').html(data.depto_nom);
@@ -314,92 +310,6 @@ function listardetalle(tick_id){
         }
     });
 }
-//CATEGORIAS Y SUBCATEGORIAS JJ 28/11/23
-function setCombos(tick_id){
 
-    /* TODO: Llenar Combo categoria */
-    $.post("../../controller/categoria.php?op=combo",function(data, status){
-        $('#categoriaId').html(data);
-    });
-    $("#categoriaId").change(function(){
-        cat_id = $(this).val();
-        /* TODO: llenar Combo subcategoria segun cat_id */
-        $.post("../../controller/subcategoria.php?op=combo",{cat_id : cat_id},function(data, status){
-            console.log(data);
-            $('#subcategoria').html(data);
-        });
-    });
-    updateInformacion(tick_id)
-    //activarUpdate
-    activarUpdate()
-}
-function setSubcategoria(cat_id,cats_id){
-    $.post("../../controller/subcategoria.php?op=combo",{cat_id : cat_id},function(data, status){
-        $('#subcategoria').html(data);
-        selectCategoria(cats_id)
-    });
-    
-}
-function selectCategoria(cats_id){
-    const select2   = document.querySelector('#subcategoria');
-    select2.value   = cats_id 
-}
-function updateInformacion(tick_id){
-    var boton = document.getElementById("botonUpdate");
-    boton.addEventListener("click",function(){
-         /* TODO: validamos si los campos tienen informacion antes de guardar */
-       /* if ($('#subcategoria').val() == 0 || $('#categoriaId').val() == 0){
-            swal("Advertencia!", "Falta Categoria o Subcategoria", "warning");
-        }else{*/
-        if ($('#categoriaId').val() == 0) {
-            swal("Advertencia!", "Falta seleccionar la Categoría", "warning");
-        } else if ($('#subcategoria').val() == 0) {
-            swal("Advertencia!", "Falta seleccionar la Subcategoría", "warning");
-        } else {
-            let formData = new FormData()
-            formData.append('tick_id',tick_id)
-            formData.append('cat_id',$('#categoriaId').val(),)
-            formData.append('cats_id',$('#subcategoria').val())
-            /* TODO: Guardar Ticket */
-            $.ajax({
-                url: "../../controller/ticket.php?op=updateTicketInformacion",
-                type: "POST",
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(data){
-                    /* TODO: Alerta de Confirmacion */
-                    desativarCampos()
-                    swal("Correcto!", "Guardado Correctamente", "success");
-                }
-            });
-        }
-    })
-}
-function activarUpdate(){
-    var boton = document.getElementById("botonChangeValores");
-    //mostrar
-    boton.addEventListener("click",function(){
-        $("#categoriaId").prop("disabled", false);
-        $("#subcategoria").prop("disabled", false);
-        $("#botonUpdate").show();
-        //acciones
-        $("#botonChangeValores").hide();
-        $("#botonDesactivarCambios").show();
-    })
-    //desactivar 
-    var botonDesactivar = document.getElementById("botonDesactivarCambios");
-    botonDesactivar.addEventListener("click",function(){
-        desativarCampos()
-    })
-}
-function desativarCampos(){
-     $("#categoriaId").prop("disabled", true);
-        $("#subcategoria").prop("disabled", true);
-        $("#botonUpdate").hide();
-        //acciones
-        $("#botonChangeValores").show();
-        $("#botonDesactivarCambios").hide();
-}
 init();
-         //Cambios JJ 28/11/23                                                           
+                                                                    

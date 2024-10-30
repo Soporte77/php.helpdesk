@@ -5,11 +5,8 @@
 <!DOCTYPE html>
 <html>
     <?php require_once("../MainHead/head.php");?>
-	<title>Peticiones</>:: Notificación</title>
-
+	<title>Peticiones</>::Mantenimiento Dependencia</title>
 </head>
-
-
 <body class="with-side-menu">
 
     <?php require_once("../MainHeader/header.php");?>
@@ -25,10 +22,10 @@
 				<div class="tbl">
 					<div class="tbl-row">
 						<div class="tbl-cell">
-							<h3>Notificación</h3>
+							<h3>Mantenimiento Dependencia</h3>
 							<ol class="breadcrumb breadcrumb-simple">
 								<li><a href="#">Home</a></li>
-								<li class="active">Notificación</li>
+								<li class="active">Mantenimiento Dependencia</li>
 							</ol>
 						</div>
 					</div>
@@ -36,10 +33,12 @@
 			</header>
 
 			<div class="box-typical box-typical-padding">
-				<table id="notificacion_data" class="table table-bordered table-striped table-vcenter js-dataTable-full">
+				<button type="button" id="btnnuevo" class="btn btn-inline btn-primary">Nuevo Registro</button>
+				<table id="usuario_data" class="table table-bordered table-striped table-vcenter js-dataTable-full">
 					<thead>
 						<tr>
-							<th style="width: 75%;">Notificación</th>
+							<th style="width: 30%;">Dependencia</th>
+							<th class="text-center" style="width: 5%;"></th>
 							<th class="text-center" style="width: 5%;"></th>
 						</tr>
 					</thead>
@@ -53,12 +52,11 @@
 	</div>
 	<!-- Contenido -->
 
+	<?php require_once("modalmantenimiento.php");?>
+
 	<?php require_once("../MainJs/js.php");?>
-
 	
-	
-
-	<script type="text/javascript" src="mntnotificacion.js"></script>
+	<script type="text/javascript" src="mntdependencia.js"></script>
 
 	<script type="text/javascript" src="../notificacion.js"></script>
 

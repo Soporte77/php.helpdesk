@@ -11,7 +11,7 @@ function guardaryeditar(e){
     e.preventDefault();
 	var formData = new FormData($("#usuario_form")[0]);
     $.ajax({
-        url: "../../controller/categoria.php?op=guardaryeditar",
+        url: "../../controller/dependencia.php?op=guardaryeditar",
         type: "POST",
         data: formData,
         contentType: false,
@@ -23,7 +23,7 @@ function guardaryeditar(e){
             $("#modalmantenimiento").modal('hide');
             $('#usuario_data').DataTable().ajax.reload();
 
-            /* TODO:Mensaje de Confirmacion */
+             /* TODO:Mensaje de Confirmacion */
             swal({
                 title: "Peticiones!",
                 text: "Completado.",
@@ -35,7 +35,9 @@ function guardaryeditar(e){
 }
 
 $(document).ready(function(){
-    /* TODO: Mostrar listado de registros */
+
+  
+
     tabla=$('#usuario_data').dataTable({
         "aProcessing": true,
         "aServerSide": true,
@@ -50,7 +52,7 @@ $(document).ready(function(){
                 'pdfHtml5'
                 ],
         "ajax":{
-            url: '../../controller/categoria.php?op=listar',
+            url: '../../controller/dependencia.php?op=listar',
             type : "post",
             dataType : "json",						
             error: function(e){
@@ -90,14 +92,14 @@ $(document).ready(function(){
 });
 
 /* TODO: Mostrar informacion segun ID en los inputs */
-function editar(cat_id){
+function editar(dep_id){
     $('#mdltitulo').html('Editar Registro');
 
     /* TODO: Mostrar Informacion en los inputs */
-    $.post("../../controller/categoria.php?op=mostrar", {cat_id : cat_id}, function (data) {
+    $.post("../../controller/dependencia.php?op=mostrar", {dep_id : dep_id}, function (data) {
         data = JSON.parse(data);
-        $('#cat_id').val(data.cat_id);
-        $('#cat_nom').val(data.cat_nom);
+        $('#dep_id').val(data.dep_id);
+        $('#dep_nom').val(data.dep_nom);
     }); 
 
     /* TODO: Mostrar Modal */
@@ -105,7 +107,7 @@ function editar(cat_id){
 }
 
 /* TODO: Cambiar estado a eliminado en caso de confirmar mensaje */
-function eliminar(cat_id){
+function eliminar(dep_id){
     swal({
         title: "Peticiones",
         text: "Esta seguro de Eliminar el registro?",
@@ -118,14 +120,12 @@ function eliminar(cat_id){
     },
     function(isConfirm) {
         if (isConfirm) {
-            $.post("../../controller/categoria.php?op=eliminar", {cat_id : cat_id}, function (data) {
+            $.post("../../controller/dependencia.php?op=eliminar", {dep_id : dep_id}, function (data) {
 
             }); 
 
-            /* TODO: Recargar Datatable JS */
             $('#usuario_data').DataTable().ajax.reload();	
 
-            /* TODO: Mensaje de Confirmacion */
             swal({
                 title: "Peticiones!",
                 text: "Registro Eliminado.",
@@ -138,7 +138,7 @@ function eliminar(cat_id){
 
 /* TODO: Limpiar Inputs */
 $(document).on("click","#btnnuevo", function(){
-    $('#cat_id').val('');
+    $('#dep_id').val('');
     $('#mdltitulo').html('Nuevo Registro');
     $('#usuario_form')[0].reset();
     /* TODO:Mostrar Modal */

@@ -38,7 +38,7 @@ $(document).ready(function() {
         cat_id = $(this).val();
         /* TODO: llenar Combo subcategoria segun cat_id */
         $.post("../../controller/subcategoria.php?op=combo",{cat_id : cat_id},function(data, status){
-            console.log(data);
+            //console.log(data);
             $('#cats_id').html(data);
         });
     });
@@ -75,16 +75,7 @@ function guardaryeditar(e){
                 data = JSON.parse(data);
                 console.log(data[0].tick_id);
 
-                /* TODO: Envio de alerta Email de ticket Abierto */
-                // $.post("../../controller/email.php?op=ticket_abierto", {tick_id : data[0].tick_id}, function (data) {
-
-                // });
-
-                // /* TODO: Envio de alerta Whaspp de ticket Abierto */
-                // $.post("../../controller/whatsapp.php?op=w_ticket_abierto", {tick_id : data[0].tick_id}, function (data) {
-
-                // });
-
+               
                 /* TODO: Limpiar campos */
                 $('#tick_titulo').val('');
                 $('#tick_descrip').summernote('reset');

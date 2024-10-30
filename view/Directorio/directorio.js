@@ -1,35 +1,40 @@
+var tabla;
+
+function init(){
+    $("#usuario_form").on("submit",function(e){
+        guardaryeditar(e);	
+    });
+}
+
+
 
 $(document).ready(function(){
-    /* TODO: Obtener ID del usuario que inicio session */
-    var usu_id = $('#user_idx').val();
-    var rol_id =  $('#rol_idx').val();
-    /* TODO: Listado de registros */
-    tabla=$('#notificacion_data').dataTable({
+    /* TODO: Mostrar listado de registros */
+    tabla=$('#usuario_data').dataTable({
         "aProcessing": true,
         "aServerSide": true,
         dom: 'Bfrtip',
         "searching": true,
         lengthChange: false,
-        colReorder: true,
-        buttons: [
+        colReorder: false,
+        buttons: [		          
                 'copyHtml5',
                 'excelHtml5',
                 'csvHtml5',
                 'pdfHtml5'
                 ],
         "ajax":{
-            url: '../../controller/notificacion.php?op=listar',
+            url: '../../controller/directorio.php?op=listar',
             type : "post",
-            dataType : "json",
-            data: {usu_id : usu_id, rol_id:rol_id},
+            dataType : "json",						
             error: function(e){
-                console.log(e.responseText);
+                console.log(e.responseText);	
             }
         },
         "bDestroy": true,
         "responsive": true,
         "bInfo":true,
-        "iDisplayLength": 10,
+        "iDisplayLength": 20,
         "autoWidth": false,
         "language": {
             "sProcessing":     "Procesando...",
@@ -55,13 +60,17 @@ $(document).ready(function(){
                 "sSortDescending": ": Activar para ordenar la columna de manera descendente"
             }
         }     
-    }).DataTable(); 
+    }).DataTable().ajax.reload();
+    tabla.column(4).visible(false);
+
+    // Redibuja la tabla para reflejar los cambios
+    tabla.draw();
+
+    // Ordena la tabla por la columna 4 de forma ascendente
+    tabla.order([4, 'asc']).draw();
+
 });
 
-/* TODO: Funcion para abrir detalle de ticket en una nueva ventana */
-function ver(tick_id){
-    window.location.href = ('http://187.237.254.57/peticiones/view/DetalleTicket/?ID='+ tick_id +'');
-    //window.open('http://187.237.254.57/helpDesk/view/DetalleTicket/?ID='+ tick_id +'');
-    //window.location.href = 'http://187.237.57/peticiones/view/DetalleTicket/?ID=' + tick_id;
 
-}
+
+init();

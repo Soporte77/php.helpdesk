@@ -33,6 +33,7 @@ if (isset($_SESSION["usu_id"])) {
                 <span class="label label-pill label-primary" id="lblnomusuario"></span><br>
                 <span class="label label-pill label-primary" id="lbltelfusuario"></span><br>
                 <span class="label label-pill label-primary" id="lblcorreousuario"></span><br>
+                
                 <ol class="breadcrumb breadcrumb-simple">
                   <li><a href="#">Home</a></li>
                   <li class="active">Detalle Ticket</li>
@@ -51,65 +52,29 @@ if (isset($_SESSION["usu_id"])) {
                   <input type="text" class="form-control" id="tick_titulo" name="tick_titulo" readonly>
                 </fieldset>
               </div>
-              <?php
-              //Cambios inicio JJ 28/11/23
-                if($_SESSION['rol_id'] == '3'){
-                  ?>
-                    <div class="col-lg-4">
-                      <fieldset class="form-group">
-                        <label class="form-label semibold" for="exampleInput">Categoria</label>
-                        <select id="categoriaId" disabled name="categoriaId" class="form-control">
-                        </select>
-                      </fieldset>
-                    </div>
-                    <div class="col-lg-4">
-                      <fieldset class="form-group">
-                        <label class="form-label semibold" for="exampleInput">SubCategoria</label>
-                        <select id="subcategoria" disabled name="subcategoria" class="form-control">
-                        </select>
-                      </fieldset>
-                    </div>
-                    <div class="col-lg-4">
-                      <fieldset class="form-group">
-                        <label class="form-label semibold" for="cat_nom">Prioridad</label>
-                        <input type="text" class="form-control" id="prio_nom" name="prio_nom" readonly>
-                      </fieldset>
-                    </div>
-                    <div class="col-lg-12">
-                      <button id="botonUpdate"            class="btn btn-rounded btn-inline btn-primary activarUpdate" style="display:none;">Guardar</button>
-                      <button id="botonChangeValores"     class="btn btn-rounded btn-inline btn-default ">Activar cambios</button>
-                      <button id="botonDesactivarCambios" class="btn btn-rounded btn-inline btn-warning " style="display:none;">Desactivar cambios</button>
-                    </div>
-                  <?php
 
-                }else{
-                  ?>
-                    <div class="col-lg-4">
-                      <fieldset class="form-group">
-                        <label class="form-label semibold" for="cat_nom">Categoria</label>
-                        <input type="text" class="form-control" id="cat_nom" name="cat_nom" readonly>
-                      </fieldset>
-                    </div>
-                    <div class="col-lg-4">
-                      <fieldset class="form-group">
-                        <label class="form-label semibold" for="cat_nom">SubCategoria</label>
-                        <input type="text" class="form-control" id="cats_nom" name="cats_nom" readonly>
-                      </fieldset>
-                    </div>
-                    <div class="col-lg-4">
-                      <fieldset class="form-group">
-                        <label class="form-label semibold" for="cat_nom">Prioridad</label>
-                        <input type="text" class="form-control" id="prio_nom" name="prio_nom" readonly>
-                      </fieldset>
-                    </div>
-                  <?php
-                   //Fin Cambios JJ 28/11/23
-                }
-              ?>
-               
+              <div class="col-lg-4">
+                <fieldset class="form-group">
+                  <label class="form-label semibold" for="cat_nom">Categoria</label>
+                  <input type="text" class="form-control" id="cat_nom" name="cat_nom" readonly>
+                </fieldset>
+              </div>
 
-            
-                <div class="col-lg-12">
+              <div class="col-lg-4">
+                <fieldset class="form-group">
+                  <label class="form-label semibold" for="cat_nom">SubCategoria</label>
+                  <input type="text" class="form-control" id="cats_nom" name="cats_nom" readonly>
+                </fieldset>
+              </div>
+
+              <div class="col-lg-4">
+                <fieldset class="form-group">
+                  <label class="form-label semibold" for="cat_nom">Prioridad</label>
+                  <input type="text" class="form-control" id="prio_nom" name="prio_nom" readonly>
+                </fieldset>
+              </div>
+
+              <div class="col-lg-12">
                 <fieldset class="form-group">
                   <label class="form-label semibold" for="tick_titulo">Documentos Adicionales</label>
                   <table id="documentos_data" class="table table-bordered table-striped table-vcenter js-dataTable-full">
@@ -173,16 +138,9 @@ if (isset($_SESSION["usu_id"])) {
                     <?php
                     if($_SESSION['rol_id'] == '3'){
                       ?>
-
-                      <button type="button" id="btnchatgpt" class="btn btn-rounded btn-inline btn-success">ChatGpt</button>
-
                       <button  type="button" id="btncerrarticket" class="btn btn-rounded btn-inline btn-warning">Cerrar Ticket</button>
                       <?php
                     }
-
-                    
-
-
                     ?>
                      <?php
                     if($_SESSION['rol_id'] == '1'){

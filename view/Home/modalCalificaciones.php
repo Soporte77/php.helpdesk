@@ -20,10 +20,8 @@
 						</tr>
 					</thead>
 					<tbody id="lblTabla">
-
 					</tbody>
 				</table>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-rounded btn-default" data-dismiss="modal">Cerrar</button>

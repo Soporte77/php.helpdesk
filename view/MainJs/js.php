@@ -18,4 +18,3 @@
 <!-- TODO: Libreria Notify Bootstrap -->
 <script src="../../public/js/lib/bootstrap-notify/bootstrap-notify.min.js"></script>
 
-
