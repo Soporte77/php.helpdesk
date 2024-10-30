@@ -14,17 +14,18 @@
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<title>Peticiones</>::Acceso</title>
 
-	<link href="img/favicon.144x144.png" rel="apple-touch-icon" type="image/png" sizes="144x144">
-	<link href="img/favicon.114x114.png" rel="apple-touch-icon" type="image/png" sizes="114x114">
-	<link href="img/favicon.72x72.png" rel="apple-touch-icon" type="image/png" sizes="72x72">
-	<link href="img/favicon.57x57.png" rel="apple-touch-icon" type="image/png">
-	<link href="img/favicon.png" rel="icon" type="image/png">
-	<link href="img/favicon.ico" rel="shortcut icon">
-
+	
+	<link href="public/img/favicon.png" rel="icon" type="image/png">
+	<link href="public/img/favicon.ico" rel="shortcut icon">
+    <link rel="icon" href="public/img/favicon.ico">
+    
     <link rel="stylesheet" href="public/css/separate/pages/login.min.css">
     <link rel="stylesheet" href="public/css/lib/font-awesome/font-awesome.min.css">
     <link rel="stylesheet" href="public/css/lib/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="public/css/main.css">
+
+   
+
 </head>
 <body>
     <div class="page-center">
@@ -78,7 +79,7 @@
                     ?>
 
                     <div class="form-group">
-                        <input type="text" id="usu_correo" name="usu_correo" class="form-control" placeholder="E-Mail"/>
+                        <input type="text" id="usu_numemp" name="usu_numemp" class="form-control" placeholder="Numero de Empleado"/>
                     </div>
                     <div class="form-group">
                         <input type="password" id="usu_pass" name="usu_pass" class="form-control" placeholder="Password"/>
@@ -106,6 +107,7 @@
             </div>
         </div>
     </div>
+
 
 <script src="public/js/lib/jquery/jquery.min.js"></script>
 <script src="public/js/lib/tether/tether.min.js"></script>

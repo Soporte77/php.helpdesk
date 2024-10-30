@@ -1,6 +1,5 @@
 # Sistema de Mesa de Ayuda HelpDesk PHP,MySQL y JS
 
-_Sistema desarrollado por anderson bastidas a modo de practica y material educativo_
 
 ## Comenzando 🚀
 
