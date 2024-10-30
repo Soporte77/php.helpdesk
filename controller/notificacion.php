@@ -8,7 +8,7 @@
     switch($_GET["op"]){
 
         /* TODO: Mostrar en formato JSON segun usu_id */
-        case "mostrar";
+        /*case "mostrar";
             $rol_id =  $_POST["rol_id"];
             $datos  = "";
             //Administrador: Traigo todas las notificaciones
@@ -27,7 +27,37 @@
                 }
                 echo json_encode($output);
             }
+            break;*/
+
+        /* TODO: Mostrar en formato JSON segun usu_id */
+        case "mostrar";
+            $datos=$notificacion->get_notificacion_x_usu($_POST["usu_id"]);  
+            if(is_array($datos)==true and count($datos)>0){
+                foreach($datos as $row)
+                {
+                    $output["not_id"] = $row["not_id"];
+                    $output["usu_id"] = $row["usu_id"];
+                    $output["not_mensaje"] = $row["not_mensaje"] . ' ' . $row["tick_id"];
+                    $output["tick_id"] = $row["tick_id"];
+                }
+                echo json_encode($output);
+            }
             break;
+//Cambio JCPR para enviar notificacion para todos los administradores cuando se genere un ticket 06/09/23
+        case "mostrar_admin";
+        $datos=$notificacion->get_notificacion_xAll2($_POST["usu_id"]);  
+        if(is_array($datos)==true and count($datos)>0){
+            foreach($datos as $row)
+            {
+                $output["not_id"] = $row["not_id"];
+                $output["usu_id"] = $row["usu_id"];
+                $output["not_mensaje"] = $row["not_mensaje"] . ' ' . $row["tick_id"];
+                $output["tick_id"] = $row["tick_id"];
+            }
+            echo json_encode($output);
+        }
+        break;
+//Cambio JCPR para enviar notificacion para todos los administradores cuando se genere un ticket 06/09/23
 
         /* TODO:Actualizar estado segun not_id */
         case "actualizar";
@@ -40,7 +70,7 @@
             $datos  = "";
             //Administrador: Traigo todas las notificaciones
             if($rol_id == 3){
-                $datos=$notificacion->get_notificacion_xAll2();
+                $datos=$notificacion->get_notificacion_xAll1($_POST["usu_id"]);
             }else{
                 $datos=$notificacion->get_notificacion_x_usu2($_POST["usu_id"]);
     

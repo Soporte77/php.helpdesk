@@ -8,14 +8,8 @@
     require_once("../models/Usuario.php");
     $usuario = new Usuario();
 
-    require_once("../models/Configuracion.php");
-    $configuracion = new Configuracion();
-
     require_once("../models/Documento.php");
     $documento = new Documento();
-
-   // require_once("../models/Whatsapp.php");
-    //$whatsapp = new Whastapp();
 
     /*TODO: opciones del controlador Ticket*/
     switch($_GET["op"]){
@@ -57,36 +51,24 @@
                     }
                 }
             }
-           // $data =  $whatsapp->w_ticket_abierto($datos[0]["tick_id"]);
             echo json_encode($datos);
             break;
-
-
-             /**ACTUALIZAR INFORMACION CATEGORIA - SUBCATEOGIRA Cambios JJ 28/11/23*/ 
-        case "updateTicketInformacion":
-            $ticket->updateTicketInformacion($_POST["tick_id"],$_POST["cat_id"],$_POST["cats_id"]);
-            break;
-            //Fin de los cambios JJ 28/11/23
 
         /* TODO: Actualizamos el ticket a cerrado y adicionamos una linea adicional */
         case "update":
             $ticket->update_ticket($_POST["tick_id"]);
             $ticket->insert_ticketdetalle_cerrar($_POST["tick_id"],$_POST["usu_id"]);
-           // $whatsapp->w_ticket_cerrado($_POST["tick_id"]);
             break;
 
         /* TODO: Reabrimos el ticket y adicionamos una linea adicional */
         case "reabrir":
             $ticket->reabrir_ticket($_POST["tick_id"]);
             $ticket->insert_ticketdetalle_reabrir($_POST["tick_id"],$_POST["usu_id"]);
-           // $whatsapp->w_ticket_cerrado($_POST["tick_id"]);
             break;
 
         /* TODO: Asignamos el ticket  */
         case "asignar":
             $ticket->update_ticket_asignacion($_POST["tick_id"],$_POST["usu_asig"]);
-           // $whatsapp->w_ticket_asignado_usuario($_POST["tick_id"]);
-            //$whatsapp->w_ticket_asignado_soporte($_POST["tick_id"]);
             break;
 
         /* TODO: Listado de tickets segun usuario,formato json para Datatable JS */
@@ -534,7 +516,6 @@
                     $output["tick_id"] = $row["tick_id"];
                     $output["usu_id"] = $row["usu_id"];
                     $output["cat_id"] = $row["cat_id"];
-                    $output["cats_id"] = $row["cats_id"];//cambio JJ 28/11/23
 
                     $output["tick_titulo"] = $row["tick_titulo"];
                     $output["tick_descrip"] = $row["tick_descrip"];
@@ -609,7 +590,7 @@
             break;
 
         /* TODO: Total de ticket para vista de soporte */
-        case "total":
+        case "total";
             $datos=$ticket->get_ticket_total();  
             if(is_array($datos)==true and count($datos)>0){
                 foreach($datos as $row)
@@ -647,7 +628,6 @@
         /* TODO: Formato Json para grafico de soporte */
         case "grafico";
             $datos=$ticket->get_ticket_grafico();  
-            $configuracion->BackupDb();
             echo json_encode($datos);
             break;
 
@@ -655,9 +635,6 @@
         case "encuesta":
             $ticket->insert_encuesta($_POST["tick_id"],$_POST["tick_estre"],$_POST["tick_coment"]);
             break;
-        case "setCantidadTickets":
-            $datos= $usuario->reiniciarContador();
-            echo  json_encode($datos);
-            break;
+
     }
 ?>

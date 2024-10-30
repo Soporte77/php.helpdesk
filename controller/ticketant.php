@@ -8,14 +8,8 @@
     require_once("../models/Usuario.php");
     $usuario = new Usuario();
 
-    require_once("../models/Configuracion.php");
-    $configuracion = new Configuracion();
-
     require_once("../models/Documento.php");
     $documento = new Documento();
-
-   // require_once("../models/Whatsapp.php");
-    //$whatsapp = new Whastapp();
 
     /*TODO: opciones del controlador Ticket*/
     switch($_GET["op"]){
@@ -57,36 +51,24 @@
                     }
                 }
             }
-           // $data =  $whatsapp->w_ticket_abierto($datos[0]["tick_id"]);
             echo json_encode($datos);
             break;
-
-
-             /**ACTUALIZAR INFORMACION CATEGORIA - SUBCATEOGIRA Cambios JJ 28/11/23*/ 
-        case "updateTicketInformacion":
-            $ticket->updateTicketInformacion($_POST["tick_id"],$_POST["cat_id"],$_POST["cats_id"]);
-            break;
-            //Fin de los cambios JJ 28/11/23
 
         /* TODO: Actualizamos el ticket a cerrado y adicionamos una linea adicional */
         case "update":
             $ticket->update_ticket($_POST["tick_id"]);
             $ticket->insert_ticketdetalle_cerrar($_POST["tick_id"],$_POST["usu_id"]);
-           // $whatsapp->w_ticket_cerrado($_POST["tick_id"]);
             break;
 
         /* TODO: Reabrimos el ticket y adicionamos una linea adicional */
         case "reabrir":
             $ticket->reabrir_ticket($_POST["tick_id"]);
             $ticket->insert_ticketdetalle_reabrir($_POST["tick_id"],$_POST["usu_id"]);
-           // $whatsapp->w_ticket_cerrado($_POST["tick_id"]);
             break;
 
         /* TODO: Asignamos el ticket  */
         case "asignar":
             $ticket->update_ticket_asignacion($_POST["tick_id"],$_POST["usu_asig"]);
-           // $whatsapp->w_ticket_asignado_usuario($_POST["tick_id"]);
-            //$whatsapp->w_ticket_asignado_soporte($_POST["tick_id"]);
             break;
 
         /* TODO: Listado de tickets segun usuario,formato json para Datatable JS */
@@ -96,14 +78,6 @@
             foreach($datos as $row){
                 $sub_array = array();
                 $sub_array[] = $row["tick_id"];
-
-                 //JCPR cambio de posicion de campo estado 15092023
-                if ($row["tick_estado"]=="Abierto"){
-                    $sub_array[] = '<span class="label label-pill label-success">Abierto</span>';
-                }else{
-                    $sub_array[] = '<a onClick="CambiarEstado('.$row["tick_id"].')"><span class="label label-pill label-danger">Cerrado</span></a>';
-                }
-                 //JCPR cambio de posicion de campo estado 15092023
                 $sub_array[] = $row["cat_nom"];
                 $sub_array[] = $row["Usuario"];
                 $sub_array[] = $row["Dependencia"];
@@ -111,7 +85,11 @@
 
                 $sub_array[] = $row["prio_nom"];
 
-               
+                if ($row["tick_estado"]=="Abierto"){
+                    $sub_array[] = '<span class="label label-pill label-success">Abierto</span>';
+                }else{
+                    $sub_array[] = '<a onClick="CambiarEstado('.$row["tick_id"].')"><span class="label label-pill label-danger">Cerrado</span></a>';
+                }
 
                 $sub_array[] = date("d/m/Y H:i:s", strtotime($row["fech_crea"]));
 
@@ -155,19 +133,16 @@
             foreach($datos as $row){
                 $sub_array = array();
                 $sub_array[] = $row["tick_id"];
-                //JCPR cambio de posicion de campo estado 15092023
-                if ($row["tick_estado"]=="Abierto"){
-                    $sub_array[] = '<span class="label label-pill label-success">Abierto</span>';
-                }else{
-                    $sub_array[] = '<a onClick="CambiarEstado('.$row["tick_id"].')"><span class="label label-pill label-danger">Cerrado</span><a>';
-                }
-                //JCPR cambio de posicion de campo estado 15092023
                 $sub_array[] = $row["cat_nom"];
                 $sub_array[] = $row["tick_titulo"];
 
                 $sub_array[] = $row["prio_nom"];
 
-                
+                if ($row["tick_estado"]=="Abierto"){
+                    $sub_array[] = '<span class="label label-pill label-success">Abierto</span>';
+                }else{
+                    $sub_array[] = '<a onClick="CambiarEstado('.$row["tick_id"].')"><span class="label label-pill label-danger">Cerrado</span><a>';
+                }
 
                 $sub_array[] = date("d/m/Y H:i:s", strtotime($row["fech_crea"]));
 
@@ -249,6 +224,37 @@
             foreach($datos as $row){
                 $sub_array = array();
                 $sub_array[] = $row["tick_id"];
+                $sub_array[] = $row["cat_nom"];
+                $sub_array[] = $row["Usuario"];
+                $sub_array[] = $row["Dependencia"];
+                $sub_array[] = $row["tick_titulo"];
+
+                $sub_array[] = $row["prio_nom"];
+
+                if ($row["tick_estado"]=="Abierto"){
+                    $sub_array[] = '<span class="label label-pill label-success">Abierto</span>';
+                }else{
+                    if($rol == 3){
+                        $sub_array[] = '<a onClick="CambiarEstado('.$row["tick_id"].')"><span class="label label-pill label-danger">Cerrado</span><a>';
+                    }else{
+                        $sub_array[] = '<a><span class="label label-pill label-danger">Cerrado</span><a>';
+
+                    }
+                }
+
+                $sub_array[] = date("d/m/Y H:i:s", strtotime($row["fech_crea"]));
+
+                if($row["fech_asig"]==null){
+                    $sub_array[] = '<span class="label label-pill label-default">Sin Asignar</span>';
+                }else{
+                    $sub_array[] = date("d/m/Y H:i:s", strtotime($row["fech_asig"]));
+                }
+
+                if($row["fech_cierre"]==null){
+                    $sub_array[] = '<span class="label label-pill label-default">Sin Cerrar</span>';
+                }else{
+                    $sub_array[] = date("d/m/Y H:i:s", strtotime($row["fech_cierre"]));
+                }
 
                 if($row["usu_asig"] == null || $row["usu_asig"] == 0){
                     $sub_array[] = '<a onClick="asignar('.$row["tick_id"].');"><span class="label label-pill label-warning">Sin Asignar</span></a>';
@@ -270,47 +276,6 @@
                     }
                    
                 }
-                
-
-
-                $sub_array[] = $row["cat_nom"];
-                $sub_array[] = $row["Usuario"];
-                $sub_array[] = $row["Dependencia"];
-                $sub_array[] = $row["tick_titulo"];
-
-                $sub_array[] = $row["prio_nom"];
-
-                
-
-                $sub_array[] = date("d/m/Y H:i:s", strtotime($row["fech_crea"]));
-
-                if($row["fech_asig"]==null){
-                    $sub_array[] = '<span class="label label-pill label-default">Sin Asignar</span>';
-                }else{
-                    $sub_array[] = date("d/m/Y H:i:s", strtotime($row["fech_asig"]));
-                }
-
-                if($row["fech_cierre"]==null){
-                    $sub_array[] = '<span class="label label-pill label-default">Sin Cerrar</span>';
-                }else{
-                    $sub_array[] = date("d/m/Y H:i:s", strtotime($row["fech_cierre"]));
-                }
-
-                
-
-                //jcpr cambio de orden de campo estado 15/09/2023//
-                if ($row["tick_estado"]=="Abierto"){
-                    $sub_array[] = '<span class="label label-pill label-success">Abierto</span>';
-                }else{
-                    if($rol == 3){
-                        $sub_array[] = '<a onClick="CambiarEstado('.$row["tick_id"].')"><span class="label label-pill label-danger">Cerrado</span><a>';
-                    }else{
-                        $sub_array[] = '<a><span class="label label-pill label-danger">Cerrado</span><a>';
-
-                    }
-                }
-                //jcpr cambio de orden de campo estado 15/09/2023//
-
 
                 $sub_array[] = '<button type="button" onClick="ver('.$row["tick_id"].');"  id="'.$row["tick_id"].'" class="btn btn-inline btn-primary btn-sm ladda-button"><i class="fa fa-eye"></i></button>';
                 $data[] = $sub_array;
@@ -324,117 +289,8 @@
             echo json_encode($results);
             break;
 
-        /* TODO: Listado de tickets cerrados,formato json para Datatable JS, filtro avanzado*/
-        case "listar_cerrado_filtro":
-            //mostrar todo
-            $datos  = [];
-            $rol    = $_POST["rol_id"];
-            $usu_id = $_POST["usu_id"];
-            if($_POST["tick_titulo"] == null && $_POST["cat_id"] == null && $_POST["prio_id"] == null){
-                //soporte traigo los que este asignados al usuario soporte
-                if($rol == 2){
-                    $datos = $ticket->listar_ticketSoporte($usu_id);
-                }
-                //administrador traigo
-                if($rol == 3){
-                    $datos = $ticket->listar_ticket_cerrado();
-                }
-                
-            }else{
-                
-                if($rol == 2){
-                    $datos=$ticket->filtrar_ticket_soporte($_POST["tick_titulo"],$_POST["cat_id"],$_POST["prio_id"], $usu_id);
-                }
-                //administrador traigo
-                if($rol == 3){
-                    $datos=$ticket->filtrar_ticket($_POST["tick_titulo"],$_POST["cat_id"],$_POST["prio_id"]);
-                }
-
-
-                
-            }
-            $data= Array();
-            foreach($datos as $row){
-                $sub_array = array();
-                $sub_array[] = $row["tick_id"];
-                
-                if($row["usu_asig"] == null || $row["usu_asig"] == 0){
-                    $sub_array[] = '<a onClick="asignar('.$row["tick_id"].');"><span class="label label-pill label-warning">Sin Asignar</span></a>';
-                }else{
-
-                
-                    if ($row["tick_estado"]=="Abierto"){
-                        
-                        $datos1=$usuario->get_usuario_x_id($row["usu_asig"]);
-                        foreach($datos1 as $row1){
-                            $sub_array[] = '<a onClick="asignar('.$row["tick_id"].');"><span class="label label-pill label-success">'. $row1["usu_nom"].'</span></a>';
-                        }
-                    }else{
-                        
-                        $datos1=$usuario->get_usuario_x_id($row["usu_asig"]);
-                        foreach($datos1 as $row1){
-                            $sub_array[] = '<span class="label label-pill label-success">'. $row1["usu_nom"].'</span>';
-                        }
-                    }
-                   
-                }
-
-
-                $sub_array[] = $row["cat_nom"];
-                $sub_array[] = $row["Usuario"];
-                $sub_array[] = $row["Dependencia"];
-                $sub_array[] = $row["tick_titulo"];
-
-                $sub_array[] = $row["prio_nom"];
-
-                
-
-                $sub_array[] = date("d/m/Y H:i:s", strtotime($row["fech_crea"]));
-
-                if($row["fech_asig"]==null){
-                    $sub_array[] = '<span class="label label-pill label-default">Sin Asignar</span>';
-                }else{
-                    $sub_array[] = date("d/m/Y H:i:s", strtotime($row["fech_asig"]));
-                }
-
-                if($row["fech_cierre"]==null){
-                    $sub_array[] = '<span class="label label-pill label-default">Sin Cerrar</span>';
-                }else{
-                    $sub_array[] = date("d/m/Y H:i:s", strtotime($row["fech_cierre"]));
-                }
-
-                //jcpr cambio de orden de campo estado 15/09/2023//
-                if ($row["tick_estado"]=="Abierto"){
-                    $sub_array[] = '<span class="label label-pill label-success">Abierto</span>';
-                }else{
-                    if($rol == 3){
-                        $sub_array[] = '<a onClick="CambiarEstado('.$row["tick_id"].')"><span class="label label-pill label-danger">Cerrado</span><a>';
-                    }else{
-                        $sub_array[] = '<a><span class="label label-pill label-danger">Cerrado</span><a>';
-
-                    }
-                }
-                //jcpr cambio de orden de campo estado 15/09/2023//
-
-                
-
-                $sub_array[] = '<button type="button" onClick="ver('.$row["tick_id"].');"  id="'.$row["tick_id"].'" class="btn btn-inline btn-primary btn-sm ladda-button"><i class="fa fa-eye"></i></button>';
-                $data[] = $sub_array;
-            }
-
-            $results = array(
-                "sEcho"=>1,
-                "iTotalRecords"=>count($data),
-                "iTotalDisplayRecords"=>count($data),
-                "aaData"=>$data);
-            echo json_encode($results);
-            break;
-
-        
-
-
-          /* TODO: Formato HTML para mostrar detalle de ticket con comentarios */
-                    case "listardetalle":
+        /* TODO: Formato HTML para mostrar detalle de ticket con comentarios */
+        case "listardetalle":
             /* TODO: Listar todo el detalle segun tick_id */
             $datos=$ticket->listar_ticketdetalle_x_ticket($_POST["tick_id"]);
             ?>
@@ -534,7 +390,6 @@
                     $output["tick_id"] = $row["tick_id"];
                     $output["usu_id"] = $row["usu_id"];
                     $output["cat_id"] = $row["cat_id"];
-                    $output["cats_id"] = $row["cats_id"];//cambio JJ 28/11/23
 
                     $output["tick_titulo"] = $row["tick_titulo"];
                     $output["tick_descrip"] = $row["tick_descrip"];
@@ -609,7 +464,7 @@
             break;
 
         /* TODO: Total de ticket para vista de soporte */
-        case "total":
+        case "total";
             $datos=$ticket->get_ticket_total();  
             if(is_array($datos)==true and count($datos)>0){
                 foreach($datos as $row)
@@ -647,7 +502,6 @@
         /* TODO: Formato Json para grafico de soporte */
         case "grafico";
             $datos=$ticket->get_ticket_grafico();  
-            $configuracion->BackupDb();
             echo json_encode($datos);
             break;
 
@@ -655,9 +509,6 @@
         case "encuesta":
             $ticket->insert_encuesta($_POST["tick_id"],$_POST["tick_estre"],$_POST["tick_coment"]);
             break;
-        case "setCantidadTickets":
-            $datos= $usuario->reiniciarContador();
-            echo  json_encode($datos);
-            break;
+
     }
 ?>
