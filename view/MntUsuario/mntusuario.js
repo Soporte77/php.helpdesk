@@ -135,8 +135,8 @@ function editar(usu_id){
         // Mostrar los elementos
         $('#dep_id').show();
         $('#depto_id').show();
-       
-        
+        //limpiar o dejar vacio .nueva_pass
+        $("#nueva_pass").val('');
         
         data = JSON.parse(data);
         console.log(data);
@@ -158,11 +158,7 @@ function editar(usu_id){
         $("#dep_id").prop("disabled", true);
         $("#depto_id").prop("disabled", true);
         $("#usu_pass").prop("disabled", true);
-        
-
-        
-
-       
+        $(".grupo_nueva_pass").css("display", "block");
 
     }); 
 
@@ -296,7 +292,8 @@ $(document).on("click","#btnnuevo", function(){
     // Luego, muestra el modal
     $('#mdltitulo').html('Nuevo Registro');
     $('#usuario_form')[0].reset();
-       
+    //display none para grupo_nueva_pass solo para editar disponible
+    $(".grupo_nueva_pass").css("display", "none");
 
     $('#usu_id').val('');
     $('#combo_dep_id').val('').trigger('change');

@@ -48,6 +48,12 @@
                         <input type="email" class="form-control" id="usu_correo" name="usu_correo" placeholder="test@test.com" required>
                     </div>
 
+                    <!--nueva contraseña -->
+                    <div class="form-group grupo_nueva_pass" style="display: none;">
+                        <label class="form-label" for="nueva_pass">Nueva Contraseña ( Si deja vacio no se modificara la actual)</label>
+                        <input type="password" class="form-control" id="nueva_pass" name="nueva_pass" placeholder="************" >
+                    </div>
+                    
                     <div class="form-group">
                         <label class="form-label" for="usu_pass">Contraseña</label>
                         <input type="text" class="form-control" id="usu_pass" name="usu_pass" placeholder="************" >
