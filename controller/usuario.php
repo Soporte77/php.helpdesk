@@ -17,6 +17,9 @@
             else {
                 $usuario->update_usuario($_POST["usu_id"],$_POST["usu_numemp"],$_POST["usu_nom"],$_POST["usu_ape"],$_POST["usu_correo"],$_POST["rol_id"],$_POST["usu_telf"]);
                 $idUsuario = $_POST["usu_id"];
+                if($_POST['nueva_pass'] != null){
+                    $usuario->update_usuario_pass($_POST["usu_id"],$_POST['nueva_pass']);
+                }
             }
             ///====GUARDAR FOTO===================
             /* TODO: Validamos si vienen archivos desde la Vista */
