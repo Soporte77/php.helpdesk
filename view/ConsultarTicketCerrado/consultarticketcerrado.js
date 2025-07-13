@@ -127,7 +127,7 @@ function guardar(e){
             swal("Correcto!", "Asignado Correctamente", "success");
 
             /* TODO: Ocultar Modal */
-            $("#modalasignar").modal('hide');
+            $("#modalasignar").modal('hide');*/
             /* TODO:Recargar Datatable JS */
             $('#ticket_data').DataTable().ajax.reload();
         }

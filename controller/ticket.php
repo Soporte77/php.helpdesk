@@ -259,13 +259,17 @@
                         
                         $datos1=$usuario->get_usuario_x_id($row["usu_asig"]);
                         foreach($datos1 as $row1){
-                            $sub_array[] = '<a onClick="asignar('.$row["tick_id"].');"><span class="label label-pill label-success">'. $row1["usu_nom"].'</span></a>';
+                            if($rol == 3){
+                               $sub_array[] = '<a onClick="asignar('.$row["tick_id"].');"><span class="label label-pill label-success">'. $row1["usu_nom"].' '.$row1["usu_ape"].'</span></a>';
+                            }else{
+                                $sub_array[] = '<span class="label label-pill label-success">'. $row1["usu_nom"].' '.$row1["usu_ape"].'</span>';
+                            }
                         }
                     }else{
                         
                         $datos1=$usuario->get_usuario_x_id($row["usu_asig"]);
                         foreach($datos1 as $row1){
-                            $sub_array[] = '<span class="label label-pill label-success">'. $row1["usu_nom"].'</span>';
+                            $sub_array[] = '<span class="label label-pill label-success">'. $row1["usu_nom"].' '.$row1["usu_ape"].'</span>';
                         }
                     }
                    

@@ -47,8 +47,8 @@
 
 						<div class="col-lg-12">
 							<fieldset class="form-group">
-								<label class="form-label semibold" for="tick_titulo">Titulo</label>
-								<input type="text" class="form-control" id="tick_titulo" name="tick_titulo" placeholder="Ingrese Titulo">
+								<label class="form-label semibold" for="tick_titulo">Area Solicitante</label>
+								<input type="text" class="form-control" id="tick_titulo" name="tick_titulo" placeholder="Ingrese Dependencia">
 							</fieldset>
 						</div>
 

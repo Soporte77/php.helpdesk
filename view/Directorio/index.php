@@ -67,7 +67,7 @@
 </body>
 </html>
 <?php
-  } else {
+ } else {
     header("Location:".Conectar::ruta()."index.php");
   }
 ?>

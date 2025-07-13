@@ -25,12 +25,12 @@
                         </a>
                     </li>
 
-                    <li class="blue-dirty">
+                    <!--<li class="blue-dirty">
                         <a href="..\Directorio\">
                             <span class="glyphicon glyphicon-th"></span>
                             <span class="lbl">Directorio</span>
                         </a>
-                    </li>
+                    --></li>
 
                 </ul>
             </nav>
@@ -63,12 +63,12 @@
                         </a>
                     </li>
 
-                    <li class="blue-dirty">
+                    <!--<li class="blue-dirty">
                         <a href="..\Directorio\">
-                            <span class="glyphicon glyphicon-th"></span>
+                          <span class="glyphicon glyphicon-th"></span>
                             <span class="lbl">Directorio</span>
                         </a>
-                    </li>
+                    --></li>
 
                 </ul>
             </nav>
