@@ -5,7 +5,22 @@
         public function insert_ticket($usu_id,$cat_id,$cats_id,$tick_titulo,$tick_descrip,$prio_id){
             $conectar= parent::conexion();
             parent::set_names();
-            $sql="INSERT INTO tm_ticket (tick_id,usu_id,cat_id,cats_id,tick_titulo,tick_descrip,tick_estado,fech_crea,usu_asig,fech_asig,prio_id,est) VALUES (NULL,?,?,?,?,?,'Abierto',now(),NULL,NULL,?,'1');";
+            $sql = "INSERT INTO tm_ticket (tick_id, usu_id, cat_id, cats_id, tick_titulo, tick_descrip, tick_estado, fech_crea, usu_asig, fech_asig, prio_id, est) 
+                    VALUES (
+                        NULL, 
+                        ?, 
+                        ?, 
+                        ?, 
+                        UPPER(?), 
+                        ?, 
+                        'Abierto', 
+                        NOW(), 
+                        NULL, 
+                        NULL, 
+                        ?, 
+                        '1'
+                    );";
+
             $sql=$conectar->prepare($sql);
             $sql->bindValue(1, $usu_id);
             $sql->bindValue(2, $cat_id);
@@ -18,17 +33,17 @@
             $sql1="select last_insert_id() as 'tick_id';";
             $sql1=$conectar->prepare($sql1);
             $sql1->execute();
-
+            //Cambio JCPR para enviar notificacion para todos los administradores cuando se genere un ticket 06/09/23
             //INSERTAR NOTIFICACION PARA EL ADMINISTRADOR NUEVO TICKET
             /* TODO: Guardar Notificacion en la tabla */
             $preResult = $sql1->fetchAll(pdo::FETCH_ASSOC);
             $getId     = $preResult[0]["tick_id"];
-            $sql2="INSERT INTO tm_notificacion (not_id,usu_id,not_mensaje,tick_id,est) VALUES (null,?,'Nuevo Ticket creado #',?,2)";
+            $sql2="call sp_i_ticketnew (?)";
             $sql2=$conectar->prepare($sql2);
-            $sql2->bindValue(1, $usu_id);
-            $sql2->bindValue(2, $getId);
+            $sql2->bindValue(1, $getId);
             $sql2->execute();
             return $preResult;
+            //Cambio JCPR para enviar notificacion para todos los administradores cuando se genere un ticket 06/09/23
         }
 
         /* TODO: Listar ticket segun id de usuario */
@@ -36,30 +51,35 @@
             $conectar= parent::conexion();
             parent::set_names();
             $sql="SELECT 
-                tm_ticket.tick_id,
-                tm_ticket.usu_id,
-                tm_ticket.cat_id,
-                tm_ticket.tick_titulo,
-                tm_ticket.tick_descrip,
-                tm_ticket.tick_estado,
-                tm_ticket.fech_crea,
-                tm_ticket.fech_cierre,
-                tm_ticket.usu_asig,
-                tm_ticket.fech_asig,
-                tm_usuario.usu_nom,
-                tm_usuario.usu_ape,
-                tm_categoria.cat_nom,
-                tm_ticket.prio_id,
-                tm_prioridad.prio_nom
-                FROM 
-                tm_ticket
-                INNER join tm_categoria on tm_ticket.cat_id = tm_categoria.cat_id
-                INNER join tm_usuario on tm_ticket.usu_id = tm_usuario.usu_id
-                INNER join tm_prioridad on tm_ticket.prio_id = tm_prioridad.prio_id
-                WHERE
-                tm_ticket.est = 1
-                AND tm_usuario.usu_id=?
-                ORDER BY tm_ticket.tick_id DESC";
+            tm_ticket.tick_id,
+            tm_ticket.usu_id,
+            tm_ticket.cat_id,
+            CONCAT(tm_usuario.usu_nom, ' ', tm_usuario.usu_ape) AS Usuario,
+            CONCAT (tm_dependencia.dep_nom,' ', tm_departamento.depto_nom) AS Dependencia,
+            tm_ticket.tick_titulo,
+            tm_ticket.tick_descrip,
+            tm_ticket.tick_estado,
+            tm_ticket.fech_crea,
+            tm_ticket.fech_cierre,
+            tm_ticket.usu_asig,
+            tm_ticket.fech_asig,
+            
+            tm_categoria.cat_nom,
+            tm_ticket.prio_id,
+            tm_prioridad.prio_nom,
+            tm_dependencia.dep_nom,
+            tm_departamento.depto_nom
+            FROM 
+            tm_ticket
+            INNER join tm_categoria on tm_ticket.cat_id = tm_categoria.cat_id
+            INNER join tm_usuario on tm_ticket.usu_id = tm_usuario.usu_id
+            INNER join tm_prioridad on tm_ticket.prio_id = tm_prioridad.prio_id
+            INNER join tm_departamento on tm_usuario.depto_id = tm_departamento.depto_id
+            INNER join tm_dependencia on tm_usuario.dep_id = tm_dependencia.dep_id
+            WHERE
+            tm_ticket.est = 1
+            AND tm_usuario.usu_id=?
+            ORDER BY tm_ticket.tick_id DESC;";
             $sql=$conectar->prepare($sql);
             $sql->bindValue(1, $usu_id);
             $sql->execute();
@@ -71,36 +91,40 @@
             $conectar= parent::conexion();
             parent::set_names();
             $sql="SELECT 
-                tm_ticket.tick_id,
-                tm_ticket.usu_id,
-                tm_ticket.cat_id,
-                tm_ticket.cats_id,
-                tm_ticket.tick_titulo,
-                tm_ticket.tick_descrip,
-                tm_ticket.tick_estado,
-                tm_ticket.fech_crea,
-                tm_ticket.fech_cierre,
-                tm_ticket.tick_estre,
-                tm_ticket.tick_coment,
-                tm_ticket.usu_asig,
-                tm_usuario.usu_nom,
-                tm_usuario.usu_ape,
-                tm_usuario.usu_correo,
-                tm_usuario.usu_telf,
-                tm_categoria.cat_nom,
-                tm_subcategoria.cats_nom,
-                tm_ticket.prio_id,
-                tm_prioridad.prio_nom
-                FROM 
-                tm_ticket
-                INNER join tm_categoria on tm_ticket.cat_id = tm_categoria.cat_id
-                INNER join tm_subcategoria on tm_ticket.cats_id = tm_subcategoria.cats_id
-                INNER join tm_usuario on tm_ticket.usu_id = tm_usuario.usu_id
-                INNER join tm_prioridad on tm_ticket.prio_id = tm_prioridad.prio_id
-                WHERE
-                tm_ticket.est = 1
-                AND tm_ticket.tick_id = ?
-                ORDER BY tm_ticket.tick_id DESC";
+            tm_ticket.tick_id,
+            tm_ticket.usu_id,
+            tm_ticket.cat_id,
+            tm_ticket.cats_id,
+            tm_ticket.tick_titulo,
+            tm_ticket.tick_descrip,
+            tm_ticket.tick_estado,
+            tm_ticket.fech_crea,
+            tm_ticket.fech_cierre,
+            tm_ticket.tick_estre,
+            tm_ticket.tick_coment,
+            tm_ticket.usu_asig,
+            tm_usuario.usu_nom,
+            tm_usuario.usu_ape,
+            tm_dependencia.dep_nom,
+            tm_departamento.depto_nom,
+            tm_usuario.usu_correo,
+            tm_usuario.usu_telf,
+            tm_categoria.cat_nom,
+            tm_subcategoria.cats_nom,
+            tm_ticket.prio_id,
+            tm_prioridad.prio_nom
+            FROM 
+            tm_ticket
+            INNER join tm_categoria on tm_ticket.cat_id = tm_categoria.cat_id
+            INNER join tm_subcategoria on tm_ticket.cats_id = tm_subcategoria.cats_id
+            INNER join tm_usuario on tm_ticket.usu_id = tm_usuario.usu_id
+            INNER join tm_prioridad on tm_ticket.prio_id = tm_prioridad.prio_id
+            INNER JOIN tm_dependencia ON tm_dependencia.dep_id = tm_usuario.dep_id
+            INNER JOIN tm_departamento ON tm_usuario.depto_id = tm_departamento.depto_id 
+            WHERE
+            tm_ticket.est = 1
+            AND tm_ticket.tick_id = ?
+            ORDER BY tm_ticket.tick_id DESC";
             $sql=$conectar->prepare($sql);
             $sql->bindValue(1, $tick_id);
             $sql->execute();
@@ -111,34 +135,21 @@
         public function listar_ticket(){
             $conectar= parent::conexion();
             parent::set_names();
-            $sql="SELECT
-                tm_ticket.tick_id,
-                tm_ticket.usu_id,
-                tm_ticket.cat_id,
-                tm_ticket.tick_titulo,
-                tm_ticket.tick_descrip,
-                tm_ticket.tick_estado,
-                tm_ticket.fech_crea,
-                tm_ticket.fech_cierre,
-                tm_ticket.usu_asig,
-                tm_ticket.fech_asig,
-                tm_usuario.usu_nom,
-                tm_usuario.usu_ape,
-                tm_categoria.cat_nom,
-                tm_ticket.prio_id,
-                tm_prioridad.prio_nom
-                FROM 
-                tm_ticket
-                INNER join tm_categoria on tm_ticket.cat_id = tm_categoria.cat_id
-                INNER join tm_usuario on tm_ticket.usu_id = tm_usuario.usu_id
-                INNER join tm_prioridad on tm_ticket.prio_id = tm_prioridad.prio_id
-                WHERE
-                tm_ticket.est = 1
-                ORDER BY tm_ticket.tick_estado ASC";
+            $sql="call sp_l_ticketadmin";
             $sql=$conectar->prepare($sql);
             $sql->execute();
             return $resultado=$sql->fetchAll();
         }
+
+        public function listar_ticket_cerrado(){
+            $conectar= parent::conexion();
+            parent::set_names();
+            $sql="call sp_l_ticketcerradoadmin";
+            $sql=$conectar->prepare($sql);
+            $sql->execute();
+            return $resultado=$sql->fetchAll();
+        }
+
         public function listar_ticketSoporte($usu_id){
             $conectar= parent::conexion();
             parent::set_names();
@@ -146,6 +157,8 @@
                 tm_ticket.tick_id,
                 tm_ticket.usu_id,
                 tm_ticket.cat_id,
+                CONCAT(tm_usuario.usu_nom, ' ', tm_usuario.usu_ape) AS Usuario,
+                CONCAT (tm_dependencia.dep_nom,' ', tm_departamento.depto_nom) AS Dependencia,
                 tm_ticket.tick_titulo,
                 tm_ticket.tick_descrip,
                 tm_ticket.tick_estado,
@@ -153,19 +166,23 @@
                 tm_ticket.fech_cierre,
                 tm_ticket.usu_asig,
                 tm_ticket.fech_asig,
-                tm_usuario.usu_nom,
-                tm_usuario.usu_ape,
+                
                 tm_categoria.cat_nom,
                 tm_ticket.prio_id,
-                tm_prioridad.prio_nom
+                tm_prioridad.prio_nom,
+                tm_dependencia.dep_nom,
+                tm_departamento.depto_nom
                 FROM 
                 tm_ticket
                 INNER join tm_categoria on tm_ticket.cat_id = tm_categoria.cat_id
                 INNER join tm_usuario on tm_ticket.usu_id = tm_usuario.usu_id
                 INNER join tm_prioridad on tm_ticket.prio_id = tm_prioridad.prio_id
+                INNER join tm_departamento on tm_usuario.depto_id = tm_departamento.depto_id
+                INNER join tm_dependencia on tm_usuario.dep_id = tm_dependencia.dep_id
                 WHERE
                 tm_ticket.est = 1
                 AND  tm_ticket.usu_asig = '$usu_id'
+                AND tm_ticket.tick_estado = 'abierto'
                 ORDER BY tm_ticket.tick_id DESC";
             $sql=$conectar->prepare($sql);
             $sql->execute();
@@ -220,7 +237,7 @@
                 $sql0->execute();
             }
 
-            $sql="INSERT INTO td_ticketdetalle (tickd_id,tick_id,usu_id,tickd_descrip,fech_crea,est) VALUES (NULL,?,?,?,now(),'1');";
+            $sql="INSERT INTO td_ticketdetalle (tickd_id,tick_id,usu_id,tickd_descrip,fech_crea,est) VALUES (NULL,?,?,UPPER(?),now(),'1');";
             $sql=$conectar->prepare($sql);
             $sql->bindValue(1, $tick_id);
             $sql->bindValue(2, $usu_id);
@@ -245,6 +262,7 @@
             $sql->execute();
             return $resultado=$sql->fetchAll();
         }
+        
 
         /* TODO: Insertar linea adicional al reabrir el ticket */
         public function insert_ticketdetalle_reabrir($tick_id,$usu_id){
@@ -261,7 +279,7 @@
             return $resultado=$sql->fetchAll();
         }
 
-        /* TODO: actualizar ticket */
+        /* TODO: actualizar ticket Cambio JJ 28-11-23*/
         public function updateTicketInformacion($tick_id,$cat_id,$cats_id){
             $conectar= parent::conexion();
             parent::set_names();
@@ -278,6 +296,8 @@
             $sql->execute();
             return $resultado=$sql->fetchAll();
         }
+        //Fin de cambio JJ 28-11-23
+
         /* TODO: actualizar ticket */
         public function update_ticket($tick_id){
             $conectar= parent::conexion();
@@ -338,7 +358,7 @@
         public function get_ticket_total(){
             $conectar= parent::conexion();
             parent::set_names();
-            $sql="SELECT COUNT(*) as TOTAL FROM tm_ticket";
+            $sql="SELECT COUNT(*) as TOTAL FROM tm_ticket WHERE est = 1;";
             $sql=$conectar->prepare($sql);
             $sql->execute();
             return $resultado=$sql->fetchAll();
@@ -348,7 +368,7 @@
         public function get_ticket_totalabierto(){
             $conectar= parent::conexion();
             parent::set_names();
-            $sql="SELECT COUNT(*) as TOTAL FROM tm_ticket where tick_estado='Abierto'";
+            $sql="SELECT COUNT(*) as TOTAL FROM tm_ticket WHERE tick_estado='Abierto' AND est = 1; ";
             $sql=$conectar->prepare($sql);
             $sql->execute();
             return $resultado=$sql->fetchAll();
@@ -358,7 +378,7 @@
         public function get_ticket_totalcerrado(){
             $conectar= parent::conexion();
             parent::set_names();
-            $sql="SELECT COUNT(*) as TOTAL FROM tm_ticket where tick_estado='Cerrado'";
+            $sql="SELECT COUNT(*) as TOTAL FROM tm_ticket WHERE tick_estado='Cerrado' AND est = 1;";
             $sql=$conectar->prepare($sql);
             $sql->execute();
             return $resultado=$sql->fetchAll();
@@ -412,6 +432,22 @@
             return $resultado=$sql->fetchAll();
 
         }
+
+        /* TODO: Filtro Avanzado de ticket para soporte */
+        public function filtrar_ticket_soporte($tick_titulo,$cat_id,$prio_id,$usu_id){
+            $conectar= parent::conexion();
+            parent::set_names();
+            $sql="call filtrar_ticket_soporte (?,?,?,?)";
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, "%".$tick_titulo."%");
+            $sql->bindValue(2, $cat_id);
+            $sql->bindValue(3, $prio_id);
+            $sql->bindValue(4, $usu_id);
+            $sql->execute();
+            return $resultado=$sql->fetchAll();
+
+        }
+
 
     }
 ?>
