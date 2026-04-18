@@ -5,7 +5,7 @@ class Configuracion{
         $host = 'localhost';
         $usuario = 'root';
         $contraseña = '';
-        $base_de_datos = 'help';
+        $base_de_datos = 'helpdesk';
 
         $conexion = new mysqli($host, $usuario, $contraseña, $base_de_datos);
 

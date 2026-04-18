@@ -25,6 +25,13 @@
                         </a>
                     </li>
 
+                    <li class="blue-dirty">
+                        <a href="..\MiEquipo\">
+                            <span class="glyphicon glyphicon-th"></span>
+                            <span class="lbl">Equipo de computo</span>
+                        </a>
+                    </li>
+
                     <!--<li class="blue-dirty">
                         <a href="..\Directorio\">
                             <span class="glyphicon glyphicon-th"></span>
@@ -160,6 +167,13 @@
                         <a href="..\Directorio\">
                             <span class="glyphicon glyphicon-th"></span>
                             <span class="lbl">Directorio</span>
+                        </a>
+                    </li>
+
+                    <li class="blue-dirty">
+                        <a href="..\GestionEquipos\">
+                            <span class="glyphicon glyphicon-hdd"></span>
+                            <span class="lbl">Gestión de Equipos</span>
                         </a>
                     </li>
 

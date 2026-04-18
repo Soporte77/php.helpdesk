@@ -31,17 +31,38 @@
             $sql->execute();
             return $resultado=$sql->fetchAll();
         }
+        //Cambio JCPR para enviar notificacion para todos los administradores cuando se genere un ticket 06/09/23
         /* TODO: Traer todas las notificaciones para el administrador */
-        public function get_notificacion_xAll2(){
+        public function get_notificacion_xAll2($usu_id){
             $conectar= parent::conexion();
             parent::set_names();
             $sql="SELECT * FROM tm_notificacion
-            WHERE not_mensaje LIKE 'Nuevo%'
-            ORDER BY not_id DESC";
+            WHERE usu_id= ?
+            AND est=2
+            ORDER BY not_id DESC
+            Limit 1";
             $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, $usu_id);
             $sql->execute();
             return $resultado=$sql->fetchAll();
-        }
+        }//Cambio JCPR para enviar notificacion para todos los administradores cuando se genere un ticket 06/09/23
+
+
+         //Cambio JCPR para enviar notificacion para todos los administradores cuando se genere un ticket 06/09/23
+        /* TODO: Traer todas las notificaciones para el administrador */
+        public function get_notificacion_xAll1($usu_id){
+            $conectar= parent::conexion();
+            parent::set_names();
+            $sql="SELECT * FROM tm_notificacion
+            WHERE usu_id= ?
+            AND est=1
+            ORDER BY not_id DESC";
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, $usu_id);
+            $sql->execute();
+            return $resultado=$sql->fetchAll();
+        }//Cambio JCPR para enviar notificacion para todos los administradores cuando se genere un ticket 06/09/23
+
 
         /* TODO: Actualizar estado de la notificacion luego de ser mostrado */
         public function update_notificacion_estado($not_id){

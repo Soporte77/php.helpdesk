@@ -6,19 +6,22 @@
             $conectar=parent::conexion();
             parent::set_names();
             if(isset($_POST["enviar"])){
-                $correo = $_POST["usu_correo"];
+                // $correo = $_POST["usu_numemp"];
+                $correo = "028026";
                 $pass = $_POST["usu_pass"];
                 $rol = $_POST["rol_id"];
                 if(empty($correo) and empty($pass)){
                     header("Location:".conectar::ruta()."index.php?m=2");
 					exit();
                 }else{
-                    $sql = "SELECT * FROM tm_usuario WHERE usu_correo=? 
-                    and usu_pass=MD5(?) and rol_id=? and est=1";
+                    // $sql = "SELECT * FROM tm_usuario WHERE usu_numemp=? 
+                    // and usu_pass=MD5(?) and rol_id=? and est=1";
+                    $sql = "SELECT * FROM tm_usuario WHERE usu_numemp=? 
+                    and rol_id=? and est=1";
                     $stmt=$conectar->prepare($sql);
                     $stmt->bindValue(1, $correo);
-                    $stmt->bindValue(2, $pass);
-                    $stmt->bindValue(3, $rol);
+                    // $stmt->bindValue(2, $pass);
+                    $stmt->bindValue(2, $rol);
                     $stmt->execute();
                     $resultado = $stmt->fetch();
                     if (is_array($resultado) and count($resultado)>0){
@@ -37,17 +40,20 @@
         }
 
         /* TODO:Insert */
-        public function insert_usuario($usu_nom,$usu_ape,$usu_correo,$usu_pass,$rol_id,$usu_telf){
+        public function insert_usuario($usu_numemp,$usu_nom,$usu_ape,$combo_dep_id,$combo_depto_id,$usu_correo,$usu_pass,$rol_id,$usu_telf){
             $conectar= parent::conexion();
             parent::set_names();
-            $sql="INSERT INTO tm_usuario (usu_id, usu_nom, usu_ape, usu_correo, usu_pass, rol_id, usu_telf, fech_crea, fech_modi, fech_elim, est) VALUES (NULL,?,?,?,MD5(?),?,?,now(), NULL, NULL, '1');";
+            $sql="INSERT INTO tm_usuario (usu_id, usu_numemp, usu_nom, usu_ape, dep_id, depto_id, usu_correo, usu_pass, rol_id, usu_telf, fech_crea, fech_modi, fech_elim, est) VALUES (NULL,?,?,?,?,?,?,MD5(?),?,?,now(), NULL, NULL, '1');";
             $sql=$conectar->prepare($sql);
-            $sql->bindValue(1, $usu_nom);
-            $sql->bindValue(2, $usu_ape);
-            $sql->bindValue(3, $usu_correo);
-            $sql->bindValue(4, $usu_pass);
-            $sql->bindValue(5, $rol_id);
-            $sql->bindValue(6, $usu_telf);
+            $sql->bindValue(1, $usu_numemp);
+            $sql->bindValue(2, $usu_nom);
+            $sql->bindValue(3, $usu_ape);
+            $sql->bindValue(4, $combo_dep_id);
+            $sql->bindValue(5, $combo_depto_id);
+            $sql->bindValue(6, $usu_correo);
+            $sql->bindValue(7, $usu_pass);
+            $sql->bindValue(8, $rol_id);
+            $sql->bindValue(9, $usu_telf);
             $sql->execute();
             $resultado=$sql->fetchAll();
             //Obtener el ultimo id insertado
@@ -70,23 +76,23 @@
         }
 
         /* TODO:Update */
-        public function update_usuario($usu_id,$usu_nom,$usu_ape,$usu_correo,$usu_pass,$rol_id,$usu_telf){
+        public function update_usuario($usu_id,$usu_numemp,$usu_nom,$usu_ape,$usu_correo,$rol_id,$usu_telf){
             $conectar= parent::conexion();
             parent::set_names();
             $sql="UPDATE tm_usuario set
+                usu_numemp = ?,
                 usu_nom = ?,
                 usu_ape = ?,
                 usu_correo = ?,
-                usu_pass = ?,
                 rol_id = ?,
                 usu_telf = ?
                 WHERE
                 usu_id = ?";
             $sql=$conectar->prepare($sql);
-            $sql->bindValue(1, $usu_nom);
-            $sql->bindValue(2, $usu_ape);
-            $sql->bindValue(3, $usu_correo);
-            $sql->bindValue(4, $usu_pass);
+            $sql->bindValue(1, $usu_numemp);
+            $sql->bindValue(2, $usu_nom);
+            $sql->bindValue(3, $usu_ape);
+            $sql->bindValue(4, $usu_correo);
             $sql->bindValue(5, $rol_id);
             $sql->bindValue(6, $usu_telf);
             $sql->bindValue(7, $usu_id);
@@ -119,7 +125,7 @@
         public function get_usuario_x_rol(){
             $conectar= parent::conexion();
             parent::set_names();
-            $sql="SELECT * FROM tm_usuario where est=1 and rol_id=2";
+            $sql="SELECT * FROM tm_usuario where est=1 and rol_id=2 or rol_id=3";
             $sql=$conectar->prepare($sql);
             $sql->execute();
             return $resultado=$sql->fetchAll();
@@ -187,8 +193,9 @@
             $sql->execute();
             return $resultado=$sql->fetchAll();
         }
-        //GRAFICO SOPORTE
-        public function graficoSoporte(){
+
+           //GRAFICO SOPORTE
+           public function graficoSoporte(){
             $conectar= parent::conexion();
             parent::set_names();
             $sql="SELECT 
@@ -305,7 +312,7 @@
             $sql->execute();
             //haz un update de usu_id 
             return $resultado=$sql->fetchAll();
-            
+
         }
         //REINCIAR CONTADOR ticket_sumatoria
         public function reiniciarContador(){
