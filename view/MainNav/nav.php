@@ -177,6 +177,13 @@
                         </a>
                     </li>
 
+                    <li class="blue-dirty">
+                        <a href="..\GestionModem\">
+                            <span class="glyphicon glyphicon-signal"></span>
+                            <span class="lbl">Gestión de Módems</span>
+                        </a>
+                    </li>
+
                 </ul>
             </nav>
         <?php
